@@ -72,13 +72,11 @@
         }
         .card:hover { border-color: var(--neon-blue); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
         
-        /* ESTILO DO VISUALIZADOR 3D */
         model-viewer {
             width: 100%;
             height: 280px;
             background: radial-gradient(circle, #222 0%, #000 100%);
             border-radius: 8px;
-            --poster-color: transparent;
         }
 
         .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon-blue); margin-top: 15px; }
@@ -132,31 +130,32 @@
             home: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-blue-mesh-23363-large.mp4",
                 items: [
-                    { id: 1, name: "Thanos Funko", price: "55,00", model: "Thanos Funko.stl" },
-                    { id: 2, name: "Kratos GOW", price: "70,00", model: "Kratos.stl" },
-                    { id: 3, name: "Darth Vader", price: "60,00", model: "funko-darth-vader.stl" }
+                    { id: 1, name: "Thanos Funko", price: "55,00", model: "Thanos Funko.glb" },
+                    { id: 2, name: "Kratos GOW", price: "70,00", model: "Kratos.glb" },
+                    { id: 3, name: "Darth Vader", price: "60,00", model: "funko-darth-vader.glb" },
+                    { id: 4, name: "Minecraft Steve", price: "45,00", model: "STEVE.glb" } // Arquivo adicionado aqui
                 ]
             },
             rpg: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-fire-and-smoke-particles-in-the-dark-32863-large.mp4",
                 items: [
-                    { id: 5, name: "Odin Figure", price: "85,00", model: "Odin Figure.stl" },
-                    { id: 6, name: "Hulk Bust", price: "90,00", model: "HulkBustv01.stl" }
+                    { id: 5, name: "Odin Figure", price: "85,00", model: "Odin Figure.glb" },
+                    { id: 6, name: "Hulk Bust", price: "90,00", model: "HulkBustv01.glb" }
                 ]
             },
             marvel: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-animation-of-futuristic-circuits-9141-large.mp4",
                 items: [
-                    { id: 7, name: "Groot Funko", price: "40,00", model: "Groot Funko.stl" },
-                    { id: 8, name: "Rocket Raccoon", price: "40,00", model: "Rocket Funko.stl" }
+                    { id: 7, name: "Groot Funko", price: "40,00", model: "Groot Funko.glb" },
+                    { id: 8, name: "Rocket Raccoon", price: "40,00", model: "Rocket Funko.glb" }
                 ]
             },
             funko: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-colorful-abstract-spheres-moving-2741-large.mp4",
                 items: [
-                    { id: 9, name: "Bumblebee Funko", price: "55,00", model: "Bumblebee Funko.stl" },
-                    { id: 10, name: "Thanos Special", price: "65,00", model: "funkothanos.stl" },
-                    { id: 11, name: "Deadpool Articulado", price: "45,00", model: "funko-deadpoolstl.stl" }
+                    { id: 9, name: "Bumblebee Funko", price: "55,00", model: "Bumblebee Funko.glb" },
+                    { id: 10, name: "Thanos Special", price: "65,00", model: "funkothanos.glb" },
+                    { id: 11, name: "Deadpool Articulado", price: "45,00", model: "funko-deadpoolstl.glb" }
                 ]
             }
         };
@@ -180,8 +179,9 @@
                             src="${item.model}" 
                             camera-controls 
                             auto-rotate 
-                            shadow-intensity="2" 
-                            exposure="1"
+                            shadow-intensity="1" 
+                            environment-image="neutral"
+                            exposure="1.2"
                             interaction-prompt="auto">
                         </model-viewer>
                         <h3>${item.name}</h3>
