@@ -24,30 +24,14 @@
 
         /* --- FUNDO ANIMADO --- */
         .video-background { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: -2; 
-            overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden;
         }
         video { 
-            object-fit: cover; 
-            width: 100vw; 
-            height: 100vh; 
-            opacity: 0.5; 
-            filter: brightness(0.6) contrast(1.2);
-            transition: opacity 1.5s ease-in-out; 
+            object-fit: cover; width: 100vw; height: 100vh; opacity: 0.5; filter: brightness(0.6) contrast(1.2);
         }
         .overlay { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: linear-gradient(45deg, rgba(0,0,0,0.9) 0%, transparent 100%); 
-            z-index: -1; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(45deg, rgba(0,0,0,0.9) 0%, transparent 100%); z-index: -1; 
         }
 
         /* --- LOADING --- */
@@ -82,22 +66,23 @@
             border-radius: 12px; 
             padding: 15px; 
             transition: 0.4s; 
-            cursor: pointer;
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
         .card:hover { border-color: var(--neon-blue); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
         
+        /* ESTILO DO VISUALIZADOR 3D */
         model-viewer {
             width: 100%;
             height: 280px;
-            background-color: rgba(0,0,0,0.2);
+            background: radial-gradient(circle, #222 0%, #000 100%);
             border-radius: 8px;
             --poster-color: transparent;
         }
 
-        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon-blue); margin-top: 10px; }
-        .card .price { color: var(--neon-green); font-size: 1.3rem; font-weight: bold; margin-top: 5px; }
+        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon-blue); margin-top: 15px; }
+        .card .price { color: var(--neon-green); font-size: 1.3rem; font-weight: bold; margin-top: 5px; margin-bottom: 15px; }
 
         /* --- CHECKOUT --- */
         .pix-checkout {
@@ -106,10 +91,9 @@
         }
         .btn-back { background: none; border: 1px solid white; color: white; padding: 5px 15px; cursor: pointer; margin-bottom: 15px; }
         .pix-key-box { background: rgba(255,255,255,0.1); padding: 10px; margin: 15px 0; border-radius: 5px; cursor: pointer; border: 1px dashed var(--neon-green); }
-        .qr-placeholder img { background: white; padding: 10px; border-radius: 10px; margin: 10px 0; }
         
-        .btn-buy { background: var(--neon-green); color: black; border: none; padding: 18px 45px; font-size: 1.2rem; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; border-radius: 5px; margin-top: 25px; transition: 0.3s; width: 100%; }
-        .btn-buy:hover { background: white; box-shadow: 0 0 20px white; }
+        .btn-buy { background: var(--neon-green); color: black; border: none; padding: 12px; font-size: 1rem; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; border-radius: 5px; transition: 0.3s; width: 100%; }
+        .btn-buy:hover { background: white; box-shadow: 0 0 15px white; }
 
         .print-animation { animation: buildLayer 0.6s forwards ease-out; }
         @keyframes buildLayer { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -126,7 +110,7 @@
 
     <div id="printer-loader">
         <div class="nozzle-container"><div class="printed-bar" id="load-bar"></div></div>
-        <h2 class="loading-text">IMPRIMINDO INTERFACE... <span id="load-percent">0%</span></h2>
+        <h2 class="loading-text">CALIBRANDO MESA 3D... <span id="load-percent">0%</span></h2>
     </div>
 
     <nav class="cyber-nav">
@@ -144,36 +128,35 @@
     <script>
         const MINHA_CHAVE_PIX = "31992994163"; 
 
-        // BANCO DE DADOS ATUALIZADO COM SEUS ARQUIVOS
         const db = {
             home: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-blue-mesh-23363-large.mp4",
                 items: [
-                    { id: 1, name: "Thanos Funko Edition", price: "55,00", model: "Thanos Funko.stl", img: "https://i.ibb.co/t6rdmat/Thanos.jpg" },
-                    { id: 2, name: "Kratos God of War", price: "70,00", model: "Kratos.stl", img: "https://i.ibb.co/d8uej4d/Kratos.jpg" },
-                    { id: 3, name: "Darth Vader Funko", price: "60,00", model: "funko-darth-vader.stl", img: "" },
-                    { id: 4, name: "Deadpool Articulado", price: "45,00", model: "funko-deadpoolstl.stl", img: "" }
+                    { id: 1, name: "Thanos Funko", price: "55,00", model: "Thanos Funko.stl" },
+                    { id: 2, name: "Kratos GOW", price: "70,00", model: "Kratos.stl" },
+                    { id: 3, name: "Darth Vader", price: "60,00", model: "funko-darth-vader.stl" }
                 ]
             },
             rpg: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-fire-and-smoke-particles-in-the-dark-32863-large.mp4",
                 items: [
-                    { id: 5, name: "Odin Figure", price: "85,00", model: "Odin Figure.stl", img: "" },
-                    { id: 6, name: "Hulk Bust", price: "90,00", model: "HulkBustv01.stl", img: "" }
+                    { id: 5, name: "Odin Figure", price: "85,00", model: "Odin Figure.stl" },
+                    { id: 6, name: "Hulk Bust", price: "90,00", model: "HulkBustv01.stl" }
                 ]
             },
             marvel: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-animation-of-futuristic-circuits-9141-large.mp4",
                 items: [
-                    { id: 7, name: "Groot Funko", price: "40,00", model: "Groot Funko.stl", img: "" },
-                    { id: 8, name: "Rocket Raccoon", price: "40,00", model: "Rocket Funko.stl", img: "" }
+                    { id: 7, name: "Groot Funko", price: "40,00", model: "Groot Funko.stl" },
+                    { id: 8, name: "Rocket Raccoon", price: "40,00", model: "Rocket Funko.stl" }
                 ]
             },
             funko: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-colorful-abstract-spheres-moving-2741-large.mp4",
                 items: [
-                    { id: 9, name: "Bumblebee Funko", price: "55,00", model: "Bumblebee Funko.stl", img: "" },
-                    { id: 10, name: "Thanos Special Edition", price: "65,00", model: "funkothanos.stl", img: "" }
+                    { id: 9, name: "Bumblebee Funko", price: "55,00", model: "Bumblebee Funko.stl" },
+                    { id: 10, name: "Thanos Special", price: "65,00", model: "funkothanos.stl" },
+                    { id: 11, name: "Deadpool Articulado", price: "45,00", model: "funko-deadpoolstl.stl" }
                 ]
             }
         };
@@ -195,12 +178,11 @@
                     <div class="card print-animation" style="animation-delay: ${index * 0.1}s">
                         <model-viewer 
                             src="${item.model}" 
-                            poster="${item.img}"
-                            alt="${item.name}"
-                            auto-rotate 
                             camera-controls 
-                            shadow-intensity="1"
-                            loading="lazy">
+                            auto-rotate 
+                            shadow-intensity="2" 
+                            exposure="1"
+                            interaction-prompt="auto">
                         </model-viewer>
                         <h3>${item.name}</h3>
                         <p class="price">R$ ${item.price}</p>
@@ -218,13 +200,10 @@
                 <div class="pix-checkout print-animation">
                     <button class="btn-back" onclick="carregarPagina('home')">← VOLTAR</button>
                     <h2>FINALIZAR PEDIDO</h2>
-                    <p>${nome}</p>
-                    <div class="qr-placeholder">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PagamentoWB3D" alt="QR Code">
-                    </div>
+                    <p style="margin: 10px 0;">Produto: <strong>${nome}</strong></p>
                     <div class="pix-key-box" onclick="copiarPix()">
                         ${MINHA_CHAVE_PIX}
-                        <br><small>(Clique para copiar chave)</small>
+                        <br><small>(Clique para copiar chave PIX)</small>
                     </div>
                     <p class="price">TOTAL: R$ ${preco}</p>
                     <button class="btn-buy" style="background: #25d366; color: white;" onclick="confirmarZap('${nome}')">
@@ -244,9 +223,10 @@
             window.open(`https://wa.me/5531992994163?text=${encodeURIComponent(msg)}`);
         }
 
+        // Lógica do Loader
         let progress = 0;
         const interval = setInterval(() => {
-            progress += Math.random() * 15;
+            progress += Math.random() * 20;
             if (progress > 100) {
                 progress = 100;
                 clearInterval(interval);
