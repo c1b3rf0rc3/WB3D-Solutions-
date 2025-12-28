@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D MAKER WORLD - Pagamento via Pix</title>
+    <title>WB 3D Solutions - Impressão e Modelagem 3D</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -43,7 +43,8 @@
         .logo { font-family: 'Orbitron'; font-size: 1.8rem; font-weight: 900; color: white; cursor: pointer; }
         .logo span { color: var(--neon-blue); }
         .nav-links { display: flex; list-style: none; gap: 30px; }
-        .nav-links button { background: none; border: none; color: white; font-size: 1rem; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron'; }
+        .nav-links button { background: none; border: none; color: white; font-size: 1rem; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron'; transition: 0.3s; }
+        .nav-links button:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
         /* --- GRID --- */
         #app-container { padding: 40px; max-width: 1200px; margin: 0 auto; }
@@ -52,6 +53,7 @@
         .card:hover { border-color: var(--neon-blue); transform: translateY(-5px); }
         .card img { width: 100%; height: 280px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
         .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon-blue); }
+        .card .price { color: var(--neon-green); font-size: 1.3rem; font-weight: bold; margin-top: 5px; }
 
         /* --- CHECKOUT / CARTEIRA DIGITAL --- */
         .pix-checkout {
@@ -59,10 +61,7 @@
             border-radius: 20px; text-align: center; max-width: 500px; margin: 0 auto;
             animation: buildLayer 0.6s forwards;
         }
-        .qr-placeholder {
-            background: white; width: 200px; height: 200px; margin: 20px auto;
-            padding: 10px; border-radius: 10px;
-        }
+        .qr-placeholder { background: white; width: 200px; height: 200px; margin: 20px auto; padding: 10px; border-radius: 10px; }
         .pix-key-box {
             background: rgba(0,0,0,0.5); border: 1px dashed var(--neon-green);
             padding: 15px; margin: 20px 0; font-family: 'Orbitron'; color: var(--neon-green);
@@ -89,11 +88,11 @@
 
     <div id="printer-loader">
         <div class="nozzle-container"><div class="printed-bar" id="load-bar"></div></div>
-        <h2 class="loading-text">PROCESSANDO... <span id="load-percent">0%</span></h2>
+        <h2 class="loading-text">INICIALIZANDO WB 3D SOLUTIONS... <span id="load-percent">0%</span></h2>
     </div>
 
     <nav class="cyber-nav">
-        <div class="logo" onclick="carregarPagina('home')">3D <span>MAKER</span> WORLD</div>
+        <div class="logo" onclick="carregarPagina('home')">WB <span>3D</span> SOLUTIONS</div>
         <ul class="nav-links">
             <li><button onclick="carregarPagina('home')">Início</button></li>
             <li><button onclick="carregarPagina('rpg')">RPG</button></li>
@@ -105,115 +104,33 @@
     <main id="app-container"></main>
 
     <script>
-        const MINHA_CHAVE_PIX = "(31)992994163"; // Sua chave configurada
+        const MINHA_CHAVE_PIX = "31992994163"; 
 
         const db = {
             home: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-blue-mesh-23363-large.mp4",
                 items: [
-                    { id: 1, name: "Crânio Cibernético 1:1", price: "R$ 150,00", img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400" },
-                    { id: 2, name: "Motor V8 Mecânico", price: "R$ 80,00", img: "https://images.unsplash.com/photo-1517420812314-8549b439da59?w=400" }
+                    { id: 1, name: "Loki Throne STL", price: "R$ 55,00", img: "https://i.ibb.co/Xrn3y7vj/Gemini-Generated-Image-tvyr86tvyr86tvyr.jpg" },
+                    { id: 2, name: "Baby Stitch Articulado", price: "R$ 35,00", img: "https://i.ibb.co/yBSB1Vp4/Gemini-Generated-Image-v6qclcv6qclcv6qc.jpg" },
+                    { id: 3, name: "Mago Supremo RPG", price: "R$ 40,00", img: "https://i.ibb.co/6R2MvR4M/Gemini-Generated-Image-77f50p77f50p77f5.jpg" },
+                    { id: 4, name: "Action Figure Sci-Fi", price: "R$ 60,00", img: "https://i.ibb.co/r2B7P0WJ/Gemini-Generated-Image-8sc4re8sc4re8sc4.jpg" }
+                ]
+            },
+            rpg: {
+                video: "https://assets.mixkit.co/videos/preview/mixkit-fire-and-smoke-particles-in-the-dark-32863-large.mp4",
+                items: [
+                    { id: 5, name: "Mago Elemental", price: "R$ 40,00", img: "https://i.ibb.co/6R2MvR4M/Gemini-Generated-Image-77f50p77f50p77f5.jpg" },
+                    { id: 6, name: "Guerreiro Futurista", price: "R$ 50,00", img: "https://i.ibb.co/r2B7P0WJ/Gemini-Generated-Image-8sc4re8sc4re8sc4.jpg" }
                 ]
             },
             marvel: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-animation-of-futuristic-circuits-9141-large.mp4",
                 items: [
-                    { id: 7, name: "Homem de Ferro MK85", price: "R$ 55,00", img: "https://images.unsplash.com/photo-1623939012331-989795002281?w=400", customVideo: "https://assets.mixkit.co/videos/preview/mixkit-technological-shining-circles-loop-2742-large.mp4" },
-                    { id: 8, name: "The Batman (2022)", price: "R$ 55,00", img: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=400", customVideo: "https://assets.mixkit.co/videos/preview/mixkit-heavy-rain-over-the-city-at-night-27515-large.mp4" }
+                    { id: 7, name: "Loki No Trono", price: "R$ 55,00", img: "https://i.ibb.co/Xrn3y7vj/Gemini-Generated-Image-tvyr86tvyr86tvyr.jpg", customVideo: "https://assets.mixkit.co/videos/preview/mixkit-technological-shining-circles-loop-2742-large.mp4" },
+                    { id: 8, name: "Homem de Ferro MK85", price: "R$ 55,00", img: "https://images.unsplash.com/photo-1623939012331-989795002281?w=400" }
                 ]
-            }
-            // Outras categorias...
-        };
-
-        function simularImpressao(callback) {
-            const loader = document.getElementById('printer-loader');
-            const loadBar = document.getElementById('load-bar');
-            const loadPercent = document.getElementById('load-percent');
-            loader.classList.remove('loader-hidden');
-            let width = 0;
-            const interval = setInterval(() => {
-                width += 10;
-                loadBar.style.width = width + '%';
-                loadPercent.innerText = width + '%';
-                if (width >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => { loader.classList.add('loader-hidden'); if (callback) callback(); }, 300);
-                }
-            }, 40);
-        }
-
-        function carregarPagina(categoria) {
-            simularImpressao(() => {
-                const dados = db[categoria] || db.home;
-                document.getElementById('bg-video').src = dados.video;
-                const container = document.getElementById('app-container');
-                container.innerHTML = '<div class="products-grid"></div>';
-                const grid = container.querySelector('.products-grid');
-
-                dados.items.forEach((item, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'card print-animation';
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    card.innerHTML = `<img src="${item.img}"><h3>${item.name}</h3><p class="price">${item.price}</p>`;
-                    card.onclick = () => abrirDetalhes(item, categoria);
-                    grid.appendChild(card);
-                });
-            });
-        }
-
-        function abrirDetalhes(item, categoriaAnterior) {
-            simularImpressao(() => {
-                if(item.customVideo) document.getElementById('bg-video').src = item.customVideo;
-                document.getElementById('app-container').innerHTML = `
-                    <div class="detail-view print-animation">
-                        <div style="flex: 1; min-width: 300px;">
-                            <button class="btn-back" onclick="carregarPagina('${categoriaAnterior}')">← VOLTAR</button>
-                            <img src="${item.img}" style="width: 100%; border-radius: 10px; border: 1px solid var(--neon-blue);">
-                        </div>
-                        <div style="flex: 1; min-width: 300px;">
-                            <h1 style="font-family: Orbitron; color: var(--neon-blue); font-size: 2.5rem;">${item.name}</h1>
-                            <p style="margin: 20px 0; color: #ccc;">Arquivo Digital STL de alta qualidade. Após o pagamento, o link de download será liberado.</p>
-                            <p style="font-size: 2rem; color: var(--neon-green); font-weight: bold;">${item.price}</p>
-                            <button class="btn-buy" onclick="irParaCheckout('${item.name}', '${item.price}')">PAGAR COM PIX</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function irParaCheckout(nome, preco) {
-            simularImpressao(() => {
-                document.getElementById('app-container').innerHTML = `
-                    <div class="pix-checkout">
-                        <h2 style="font-family: Orbitron; color: var(--neon-green);">CARTEIRA DIGITAL</h2>
-                        <p style="margin-top: 10px;">Você está adquirindo: <strong>${nome}</strong></p>
-                        <p>Valor total: <span style="color: var(--neon-green); font-weight: bold;">${preco}</span></p>
-                        
-                        <div class="qr-placeholder">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=ChavePix:${MINHA_CHAVE_PIX}" alt="QR Code Pix">
-                        </div>
-                        
-                        <p>Escaneie o QR Code ou copie a chave abaixo:</p>
-                        <div class="pix-key-box" onclick="copiarChave()">
-                            <i class="fas fa-copy"></i> <span id="chave">${MINHA_CHAVE_PIX}</span>
-                        </div>
-                        
-                        <p style="font-size: 0.9rem; color: #888;">Após pagar, envie o comprovante para nosso suporte.</p>
-                        <button class="btn-buy" style="background: #25D366; color: white;" onclick="window.open('https://wa.me/5531992994163?text=Ol%C3%A1%2C%20envio%20o%20comprovante%20do%20produto%20${nome}')">
-                            <i class="fab fa-whatsapp"></i> ENVIAR COMPROVANTE
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function copiarChave() {
-            const chave = document.getElementById('chave').innerText;
-            navigator.clipboard.writeText(chave);
-            alert("Chave Pix copiada com sucesso!");
-        }
-
-        window.onload = () => carregarPagina('home');
-    </script>
-</body>
-</html>
+            },
+            funko: {
+                video: "https://assets.mixkit.co/videos/preview/mixkit-colorful-abstract-spheres-moving-2741-large.mp4",
+                items: [
+                    { id: 9, name: "Stitch Blue", price: "R$ 35,00", img: "
