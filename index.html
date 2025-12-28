@@ -11,24 +11,22 @@
 
     <style>
         :root {
-            --neon-blue: #00f3ff;
             --neon-green: #0aff00;
-            --bg-dark: #050505;
-            --card-bg: rgba(20, 20, 20, 0.8);
-            --border: #222;
+            --neon-blue: #00f3ff;
+            --bg-dark: #080808;
+            --card-bg: rgba(15, 15, 15, 0.9);
+            --border: #1a1a1a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
         
-        /* --- FUNDO MÁGICO ANIMADO --- */
         body { 
-            background: linear-gradient(-45deg, #050505, #0a1128, #1c0221, #000000);
+            background: linear-gradient(-45deg, #050505, #0d1a0d, #050505, #000000);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            color: white; 
-            min-height: 100vh;
-            overflow-x: hidden;
+            color: white; min-height: 100vh; overflow-x: hidden;
         }
+
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -37,96 +35,99 @@
 
         /* --- NAVBAR --- */
         nav {
-            background: rgba(0,0,0,0.9);
-            padding: 15px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--neon-blue);
-            position: sticky; top: 0; z-index: 1000;
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.95);
+            padding: 10px 5%;
+            display: flex; flex-direction: column; gap: 10px;
+            border-bottom: 2px solid var(--neon-green);
+            position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(15px);
         }
-        .logo { font-family: 'Orbitron'; font-weight: 900; color: white; cursor: pointer; }
-        .logo span { color: var(--neon-blue); }
-        .menu-icon { font-size: 1.5rem; color: var(--neon-blue); cursor: pointer; }
+
+        .nav-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+
+        /* BARRA DE PESQUISA */
+        .search-container {
+            width: 100%; position: relative; display: flex; align-items: center;
+            background: #111; border: 1px solid #333; border-radius: 5px; padding: 5px 15px;
+        }
+        .search-container input {
+            background: transparent; border: none; color: white; width: 100%;
+            padding: 8px; font-size: 1rem; outline: none;
+        }
+        .search-container i { color: var(--neon-green); cursor: pointer; }
+
+        .logo { font-family: 'Orbitron'; font-weight: 900; font-size: 1.4rem; color: white; cursor: pointer; }
+        .logo span { color: var(--neon-green); }
+        .menu-icon { font-size: 1.5rem; color: var(--neon-green); cursor: pointer; }
 
         /* --- SIDEBAR --- */
         .sidebar {
             position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
-            background: rgba(0,0,0,0.95); border-left: 2px solid var(--neon-blue);
+            background: rgba(0,0,0,0.98); border-left: 2px solid var(--neon-green);
             z-index: 2000; transition: 0.5s; padding: 60px 30px;
         }
         .sidebar.active { right: 0; }
-        .sidebar .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; }
         .sidebar ul { list-style: none; }
         .sidebar ul li { margin: 25px 0; }
-        .sidebar ul li a { 
-            color: white; text-decoration: none; font-family: 'Orbitron'; 
-            font-size: 1.1rem; cursor: pointer; transition: 0.3s;
-        }
-        .sidebar ul li a:hover { color: var(--neon-blue); padding-left: 10px; }
+        .sidebar ul li a { color: white; text-decoration: none; font-family: 'Orbitron'; cursor: pointer; }
+        .sidebar ul li a:hover { color: var(--neon-green); }
 
-        /* --- GRID DE PRODUTOS (VITRINE) --- */
+        /* --- VITRINE --- */
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-            padding: 40px 5%;
-            max-width: 1300px;
-            margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px; padding: 30px 5%; max-width: 1300px; margin: 0 auto;
         }
         .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 10px; padding: 15px; text-align: center; transition: 0.3s;
         }
-        .product-card:hover { border-color: var(--neon-blue); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
-        .card-img { width: 100%; height: 200px; background: #000; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
-        .card-name { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 10px; height: 50px; }
-        .card-price { color: var(--neon-green); font-weight: 700; font-size: 1.3rem; }
+        .product-card:hover { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(10, 255, 0, 0.2); }
+        .card-img { width: 100%; height: 180px; background: #000; border-radius: 5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
+        .card-name { font-family: 'Orbitron'; font-size: 0.9rem; margin-bottom: 8px; color: #ddd; }
+        .card-price { color: var(--neon-green); font-weight: 700; font-size: 1.2rem; }
 
-        /* --- DETALHES DO PRODUTO (3D) --- */
-        .main-wrapper { max-width: 1300px; margin: 40px auto; display: flex; flex-wrap: wrap; gap: 30px; padding: 20px; }
-        .product-visuals { flex: 1.5; min-width: 350px; }
-        .main-3d-view { width: 100%; height: 500px; background: rgba(0,0,0,0.5); border-radius: 15px; border: 1px solid var(--border); }
-        .product-details { flex: 1; min-width: 350px; padding: 30px; background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border); }
-        .qty-selector { display: flex; align-items: center; gap: 15px; margin: 25px 0; }
-        .qty-btn { background: #222; border: 1px solid var(--neon-blue); color: white; width: 45px; height: 45px; cursor: pointer; border-radius: 5px; }
-        .qty-val { font-size: 1.5rem; font-family: 'Orbitron'; width: 60px; text-align: center; }
-        .btn-buy-main { width: 100%; background: var(--neon-green); color: black; border: none; padding: 20px; font-family: 'Orbitron'; font-weight: 900; border-radius: 10px; cursor: pointer; }
+        /* --- PÁGINA DE PRODUTO --- */
+        .main-wrapper { max-width: 1200px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+        .product-visuals { flex: 1.2; min-width: 300px; }
+        .main-3d-view { width: 100%; height: 450px; background: #000; border-radius: 10px; border: 1px solid #222; }
+        .product-details { flex: 1; min-width: 300px; padding: 25px; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); }
+        
+        .qty-selector { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
+        .qty-btn { background: #1a1a1a; border: 1px solid var(--neon-green); color: white; width: 40px; height: 40px; cursor: pointer; }
+        .btn-buy-main { width: 100%; background: var(--neon-green); color: black; border: none; padding: 18px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; }
 
-        @media (max-width: 768px) { .main-3d-view { height: 300px; } .product-name { font-size: 1.8rem; } }
+        @media (max-width: 768px) { .nav-top { margin-bottom: 10px; } }
     </style>
 </head>
 <body>
 
 <div class="sidebar" id="sidebar">
-    <i class="fas fa-times close-btn" onclick="toggleMenu()"></i>
+    <i class="fas fa-times" onclick="toggleMenu()" style="position:absolute; top:20px; right:20px; cursor:pointer;"></i>
     <ul>
         <li><a onclick="navegar('home')">INÍCIO</a></li>
         <li><a onclick="navegar('colecionaveis')">COLECIONÁVEIS</a></li>
         <li><a onclick="navegar('rpg')">RPG</a></li>
         <li><a onclick="navegar('funko')">FUNKO POP</a></li>
-        <li><a onclick="navegar('chibi')">CHIBI</a></li>
     </ul>
 </div>
 
 <nav>
-    <div class="logo" onclick="navegar('home')">WB <span>3D</span> SOLUTIONS</div>
-    <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-ellipsis-v"></i></div>
+    <div class="nav-top">
+        <div class="logo" onclick="navegar('home')">WB <span>3D</span> SOLUTIONS</div>
+        <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    </div>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="O que você está procurando?" onkeyup="if(event.key==='Enter') realizarBusca()">
+        <i class="fas fa-search" onclick="realizarBusca()"></i>
+    </div>
 </nav>
 
-<div id="content">
-    </div>
+<div id="content"></div>
 
 <script>
     const produtos = {
-        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis", specs: ["15cm", "Resina Premium"] },
-        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko", specs: ["10cm", "Resina Premium"] },
-        'kratos': { name: "KRATOS GOD OF WAR", price: 89.90, model: "Kratos.glb", category: "colecionaveis", specs: ["20cm", "Edição Luxo"] }
+        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis" },
+        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko" },
+        'kratos': { name: "KRATOS GOD OF WAR", price: 89.90, model: "Kratos.glb", category: "colecionaveis" }
     };
 
     let quantidade = 1;
@@ -134,20 +135,51 @@
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
-    // FUNÇÃO PARA MOSTRAR A LISTA DE CARDS
+    // --- SISTEMA DE BUSCA POR SEMELHANÇA ---
+    function realizarBusca() {
+        const termo = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (!termo) return;
+
+        let melhorMatch = null;
+        let maiorPontuacao = 0;
+
+        for (let id in produtos) {
+            const nome = produtos[id].name.toLowerCase();
+            // Verifica se contém o termo exato
+            if (nome.includes(termo)) {
+                renderizarProduto(id);
+                return;
+            }
+            // Lógica simples de semelhança (score)
+            let score = 0;
+            const palavrasBusca = termo.split(' ');
+            palavrasBusca.forEach(p => { if(nome.includes(p)) score++; });
+
+            if (score > maiorPontuacao) {
+                maiorPontuacao = score;
+                melhorMatch = id;
+            }
+        }
+
+        if (melhorMatch) {
+            alert("Não encontramos exatamente o que procurou, mas veja este produto semelhante!");
+            renderizarProduto(melhorMatch);
+        } else {
+            alert("Nenhum produto encontrado.");
+        }
+    }
+
     function mostrarVitrine(filtro = 'home') {
         const container = document.getElementById('content');
         let html = `<div class="product-grid">`;
-        
         for (let id in produtos) {
             if (filtro === 'home' || produtos[id].category === filtro) {
                 html += `
                     <div class="product-card" onclick="renderizarProduto('${id}')">
-                        <div class="card-img"><i class="fas fa-cube" style="font-size:3rem; color:var(--neon-blue)"></i></div>
+                        <div class="card-img"><i class="fas fa-cube" style="font-size:3rem; color:var(--neon-green)"></i></div>
                         <h3 class="card-name">${produtos[id].name}</h3>
                         <p class="card-price">R$ ${produtos[id].price.toFixed(2)}</p>
-                    </div>
-                `;
+                    </div>`;
             }
         }
         html += `</div>`;
@@ -155,43 +187,29 @@
         window.scrollTo(0,0);
     }
 
-    // FUNÇÃO PARA MOSTRAR O PRODUTO 3D
     function renderizarProduto(id) {
         const p = produtos[id];
         produtoAtual = id;
         quantidade = 1;
-        const container = document.getElementById('content');
-        
-        container.innerHTML = `
+        document.getElementById('content').innerHTML = `
             <div class="main-wrapper">
                 <div class="product-visuals">
                     <div class="main-3d-view">
-                        <model-viewer src="${p.model}" camera-controls auto-rotate shadow-intensity="1"></model-viewer>
+                        <model-viewer src="${p.model}" camera-controls auto-rotate shadow-intensity="1" exposure="1.2"></model-viewer>
                     </div>
                 </div>
                 <div class="product-details">
-                    <p style="color:var(--neon-blue)">WB 3D SOLUTIONS</p>
-                    <h1 class="product-name" style="font-family:Orbitron; margin:10px 0;">${p.name}</h1>
-                    <div class="price-tag">R$ ${p.price.toFixed(2)}</div>
+                    <h1 class="product-name" style="font-family:Orbitron; color:white;">${p.name}</h1>
+                    <div class="price-tag" style="font-size:2rem; color:var(--neon-green); margin:15px 0;">R$ ${p.price.toFixed(2)}</div>
                     <div class="qty-selector">
                         <button class="qty-btn" onclick="alterarQty(-1)">-</button>
-                        <div class="qty-val" id="qty">1</div>
+                        <div id="qty" style="width:40px; text-align:center; font-size:1.2rem;">1</div>
                         <button class="qty-btn" onclick="alterarQty(1)">+</button>
                     </div>
-                    <button class="btn-buy-main" onclick="checkout()">
-                        <i class="fab fa-whatsapp"></i> COMPRAR AGORA
-                    </button>
-                    <p onclick="mostrarVitrine()" style="margin-top:20px; cursor:pointer; color:gray;"><i class="fas fa-arrow-left"></i> Voltar para vitrine</p>
+                    <button class="btn-buy-main" onclick="checkout()">COMPRAR NO WHATSAPP</button>
+                    <p onclick="mostrarVitrine()" style="margin-top:20px; cursor:pointer; color:var(--neon-green);"><i class="fas fa-arrow-left"></i> Ver mais modelos</p>
                 </div>
-            </div>
-        `;
-        window.scrollTo(0,0);
-    }
-
-    function navegar(pagina) {
-        toggleMenu();
-        if (pagina === 'home') mostrarVitrine('home');
-        else mostrarVitrine(pagina);
+            </div>`;
     }
 
     function alterarQty(valor) {
@@ -201,9 +219,11 @@
         document.getElementById('qty').innerText = quantidade;
     }
 
+    function navegar(pagina) { toggleMenu(); mostrarVitrine(pagina); }
+
     function checkout() {
         const p = produtos[produtoAtual];
-        const msg = `Olá! Quero ${quantidade} unidade(s) do ${p.name}.`;
+        const msg = `Olá! Quero comprar ${quantidade} unidade(s) do ${p.name}.`;
         window.open(`https://wa.me/5531992994163?text=${encodeURIComponent(msg)}`);
     }
 
