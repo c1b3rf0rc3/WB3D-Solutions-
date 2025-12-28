@@ -14,91 +14,125 @@
             --neon-green: #0aff00;
             --neon-blue: #00f3ff;
             --bg-dark: #080808;
-            --card-bg: rgba(15, 15, 15, 0.9);
-            --border: #1a1a1a;
+            --card-bg: rgba(0, 0, 0, 0.7);
+            --border: rgba(10, 255, 0, 0.3);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
         
         body { 
-            background: linear-gradient(-45deg, #050505, #0d1a0d, #050505, #000000);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white; min-height: 100vh; overflow-x: hidden;
+            background: #000;
+            color: white; 
+            min-height: 100vh; 
+            overflow-x: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- VÍDEO DE FUNDO MÁGICO --- */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(0.4) contrast(1.2);
+            object-fit: cover;
         }
 
         /* --- NAVBAR --- */
         nav {
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.85);
             padding: 10px 5%;
             display: flex; flex-direction: column; gap: 10px;
             border-bottom: 2px solid var(--neon-green);
             position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(15px);
         }
-
         .nav-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-
-        /* BARRA DE PESQUISA */
         .search-container {
             width: 100%; position: relative; display: flex; align-items: center;
-            background: #111; border: 1px solid #333; border-radius: 5px; padding: 5px 15px;
+            background: rgba(255,255,255,0.1); border: 1px solid var(--border); border-radius: 5px; padding: 2px 15px;
         }
         .search-container input {
             background: transparent; border: none; color: white; width: 100%;
             padding: 8px; font-size: 1rem; outline: none;
         }
-        .search-container i { color: var(--neon-green); cursor: pointer; }
-
         .logo { font-family: 'Orbitron'; font-weight: 900; font-size: 1.4rem; color: white; cursor: pointer; }
         .logo span { color: var(--neon-green); }
-        .menu-icon { font-size: 1.5rem; color: var(--neon-green); cursor: pointer; }
+
+        /* --- CARROSSEL DESTAQUE (LOOP UM POR UM) --- */
+        .hero-carousel {
+            width: 100%;
+            height: 400px;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            padding: 0 10%;
+        }
+        .hero-item.active { opacity: 1; z-index: 10; }
+        .hero-info h2 { font-family: 'Orbitron'; font-size: 2.5rem; color: var(--neon-green); text-shadow: 0 0 10px black; }
+        .hero-3d { width: 300px; height: 300px; pointer-events: none; }
+
+        /* --- VITRINE EM GRADE (3 COLUNAS) --- */
+        .product-grid {
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 3 colunas fixas no desktop */
+            gap: 25px; 
+            padding: 40px 5%; 
+            max-width: 1200px; 
+            margin: 0 auto;
+        }
+        .product-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 10px; padding: 20px; text-align: center; 
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .product-card:hover { border-color: var(--neon-green); transform: scale(1.03); }
+        .card-img { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .card-name { font-family: 'Orbitron'; font-size: 1rem; margin: 15px 0; color: #fff; }
+        .card-price { color: var(--neon-green); font-weight: 700; font-size: 1.5rem; }
 
         /* --- SIDEBAR --- */
         .sidebar {
             position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
-            background: rgba(0,0,0,0.98); border-left: 2px solid var(--neon-green);
+            background: rgba(0,0,0,0.95); border-left: 2px solid var(--neon-green);
             z-index: 2000; transition: 0.5s; padding: 60px 30px;
         }
         .sidebar.active { right: 0; }
         .sidebar ul { list-style: none; }
         .sidebar ul li { margin: 25px 0; }
         .sidebar ul li a { color: white; text-decoration: none; font-family: 'Orbitron'; cursor: pointer; }
-        .sidebar ul li a:hover { color: var(--neon-green); }
 
-        /* --- VITRINE --- */
-        .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px; padding: 30px 5%; max-width: 1300px; margin: 0 auto;
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-carousel { height: 300px; }
+            .hero-info h2 { font-size: 1.5rem; }
+            .hero-3d { width: 150px; height: 150px; }
         }
-        .product-card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 10px; padding: 15px; text-align: center; transition: 0.3s;
+        @media (max-width: 600px) {
+            .product-grid { grid-template-columns: 1fr; }
         }
-        .product-card:hover { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(10, 255, 0, 0.2); }
-        .card-img { width: 100%; height: 180px; background: #000; border-radius: 5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
-        .card-name { font-family: 'Orbitron'; font-size: 0.9rem; margin-bottom: 8px; color: #ddd; }
-        .card-price { color: var(--neon-green); font-weight: 700; font-size: 1.2rem; }
-
-        /* --- PÁGINA DE PRODUTO --- */
-        .main-wrapper { max-width: 1200px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
-        .product-visuals { flex: 1.2; min-width: 300px; }
-        .main-3d-view { width: 100%; height: 450px; background: #000; border-radius: 10px; border: 1px solid #222; }
-        .product-details { flex: 1; min-width: 300px; padding: 25px; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); }
-        
-        .qty-selector { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
-        .qty-btn { background: #1a1a1a; border: 1px solid var(--neon-green); color: white; width: 40px; height: 40px; cursor: pointer; }
-        .btn-buy-main { width: 100%; background: var(--neon-green); color: black; border: none; padding: 18px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; }
-
-        @media (max-width: 768px) { .nav-top { margin-bottom: 10px; } }
     </style>
 </head>
 <body>
+
+<video autoplay muted loop id="bg-video">
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-green-and-blue-smoke-background-31481-large.mp4" type="video/mp4">
+</video>
 
 <div class="sidebar" id="sidebar">
     <i class="fas fa-times" onclick="toggleMenu()" style="position:absolute; top:20px; right:20px; cursor:pointer;"></i>
@@ -116,118 +150,93 @@
         <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     </div>
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="O que você está procurando?" onkeyup="if(event.key==='Enter') realizarBusca()">
+        <input type="text" id="searchInput" placeholder="Buscar modelo 3D..." onkeyup="if(event.key==='Enter') realizarBusca()">
         <i class="fas fa-search" onclick="realizarBusca()"></i>
     </div>
 </nav>
 
-<div id="content"></div>
+<div id="content">
+    </div>
 
 <script>
     const produtos = {
-        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis" },
-        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko" },
-        'kratos': { name: "KRATOS GOD OF WAR", price: 89.90, model: "Kratos.glb", category: "colecionaveis" }
+        'steve': { name: "STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis" },
+        'thanos': { name: "THANOS POP", price: 55.00, model: "Thanos Funko.glb", category: "funko" },
+        'kratos': { name: "KRATOS GOW", price: 89.90, model: "Kratos.glb", category: "colecionaveis" },
+        'ironman': { name: "IRON MAN", price: 75.00, model: "Ironman.glb", category: "colecionaveis" },
+        'groot': { name: "BABY GROOT", price: 35.00, model: "Groot.glb", category: "colecionaveis" },
+        'batman': { name: "BATMAN", price: 95.00, model: "Batman.glb", category: "colecionaveis" }
     };
 
-    let quantidade = 1;
-    let produtoAtual = 'steve';
+    let currentSlide = 0;
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
-    // --- SISTEMA DE BUSCA POR SEMELHANÇA ---
-    function realizarBusca() {
-        const termo = document.getElementById('searchInput').value.toLowerCase().trim();
-        if (!termo) return;
+    function mostrarVitrine() {
+        const container = document.getElementById('content');
+        
+        // Seção Hero (Carrossel em Loop)
+        let heroHtml = `<div class="hero-carousel" id="hero">`;
+        Object.keys(produtos).forEach((id, index) => {
+            heroHtml += `
+                <div class="hero-item ${index === 0 ? 'active' : ''}" id="slide-${index}">
+                    <div class="hero-info">
+                        <h2>${produtos[id].name}</h2>
+                        <button class="btn-buy-main" style="width:200px; margin-top:10px" onclick="renderizarProduto('${id}')">VER DETALHES</button>
+                    </div>
+                    <div class="hero-3d">
+                        <model-viewer src="${produtos[id].model}" auto-rotate shadow-intensity="1"></model-viewer>
+                    </div>
+                </div>`;
+        });
+        heroHtml += `</div>`;
 
-        let melhorMatch = null;
-        let maiorPontuacao = 0;
-
+        // Grade de Produtos (3 colunas)
+        let gridHtml = `<div class="product-grid">`;
         for (let id in produtos) {
-            const nome = produtos[id].name.toLowerCase();
-            // Verifica se contém o termo exato
-            if (nome.includes(termo)) {
-                renderizarProduto(id);
-                return;
-            }
-            // Lógica simples de semelhança (score)
-            let score = 0;
-            const palavrasBusca = termo.split(' ');
-            palavrasBusca.forEach(p => { if(nome.includes(p)) score++; });
-
-            if (score > maiorPontuacao) {
-                maiorPontuacao = score;
-                melhorMatch = id;
-            }
+            gridHtml += `
+                <div class="product-card" onclick="renderizarProduto('${id}')">
+                    <div class="card-img">
+                         <model-viewer src="${produtos[id].model}" auto-rotate style="width:100%; height:100%"></model-viewer>
+                    </div>
+                    <h3 class="card-name">${produtos[id].name}</h3>
+                    <p class="card-price">R$ ${produtos[id].price.toFixed(2)}</p>
+                </div>`;
         }
+        gridHtml += `</div>`;
 
-        if (melhorMatch) {
-            alert("Não encontramos exatamente o que procurou, mas veja este produto semelhante!");
-            renderizarProduto(melhorMatch);
-        } else {
-            alert("Nenhum produto encontrado.");
-        }
+        container.innerHTML = heroHtml + gridHtml;
+        iniciarCarrossel();
     }
 
-    function mostrarVitrine(filtro = 'home') {
-        const container = document.getElementById('content');
-        let html = `<div class="product-grid">`;
-        for (let id in produtos) {
-            if (filtro === 'home' || produtos[id].category === filtro) {
-                html += `
-                    <div class="product-card" onclick="renderizarProduto('${id}')">
-                        <div class="card-img"><i class="fas fa-cube" style="font-size:3rem; color:var(--neon-green)"></i></div>
-                        <h3 class="card-name">${produtos[id].name}</h3>
-                        <p class="card-price">R$ ${produtos[id].price.toFixed(2)}</p>
-                    </div>`;
-            }
-        }
-        html += `</div>`;
-        container.innerHTML = html;
-        window.scrollTo(0,0);
+    function iniciarCarrossel() {
+        const slides = document.querySelectorAll('.hero-item');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 4000); // Troca a cada 4 segundos
     }
 
     function renderizarProduto(id) {
         const p = produtos[id];
-        produtoAtual = id;
-        quantidade = 1;
         document.getElementById('content').innerHTML = `
-            <div class="main-wrapper">
-                <div class="product-visuals">
-                    <div class="main-3d-view">
-                        <model-viewer src="${p.model}" camera-controls auto-rotate shadow-intensity="1" exposure="1.2"></model-viewer>
-                    </div>
+            <div style="padding: 20px; max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; gap: 30px;">
+                <div style="flex: 1.5; min-width: 300px; height: 500px; background: rgba(0,0,0,0.6); border-radius: 15px; border: 1px solid var(--neon-green);">
+                    <model-viewer src="${p.model}" camera-controls auto-rotate style="width:100%; height:100%"></model-viewer>
                 </div>
-                <div class="product-details">
-                    <h1 class="product-name" style="font-family:Orbitron; color:white;">${p.name}</h1>
-                    <div class="price-tag" style="font-size:2rem; color:var(--neon-green); margin:15px 0;">R$ ${p.price.toFixed(2)}</div>
-                    <div class="qty-selector">
-                        <button class="qty-btn" onclick="alterarQty(-1)">-</button>
-                        <div id="qty" style="width:40px; text-align:center; font-size:1.2rem;">1</div>
-                        <button class="qty-btn" onclick="alterarQty(1)">+</button>
-                    </div>
-                    <button class="btn-buy-main" onclick="checkout()">COMPRAR NO WHATSAPP</button>
-                    <p onclick="mostrarVitrine()" style="margin-top:20px; cursor:pointer; color:var(--neon-green);"><i class="fas fa-arrow-left"></i> Ver mais modelos</p>
+                <div style="flex: 1; padding: 20px; background: rgba(0,0,0,0.8); border-radius: 15px;">
+                    <h1 style="font-family:Orbitron; color:var(--neon-green)">${p.name}</h1>
+                    <p style="font-size: 2.5rem; margin: 20px 0;">R$ ${p.price.toFixed(2)}</p>
+                    <button class="btn-buy-main" onclick="checkout('${id}')">COMPRAR AGORA</button>
+                    <p onclick="mostrarVitrine()" style="margin-top:20px; cursor:pointer; color:gray;"><i class="fas fa-arrow-left"></i> Voltar</p>
                 </div>
             </div>`;
     }
 
-    function alterarQty(valor) {
-        quantidade += valor;
-        if (quantidade < 1) quantidade = 1;
-        if (quantidade > 1000) quantidade = 1000;
-        document.getElementById('qty').innerText = quantidade;
-    }
+    function navegar(pagina) { toggleMenu(); if(pagina === 'home') mostrarVitrine(); }
 
-    function navegar(pagina) { toggleMenu(); mostrarVitrine(pagina); }
-
-    function checkout() {
-        const p = produtos[produtoAtual];
-        const msg = `Olá! Quero comprar ${quantidade} unidade(s) do ${p.name}.`;
-        window.open(`https://wa.me/5531992994163?text=${encodeURIComponent(msg)}`);
-    }
-
-    window.onload = () => mostrarVitrine('home');
+    window.onload = mostrarVitrine;
 </script>
 </body>
 </html>
