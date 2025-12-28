@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Steve - WB 3D Solutions</title>
+    <title>WB 3D Solutions - Store</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -14,206 +14,200 @@
             --neon-blue: #00f3ff;
             --neon-green: #0aff00;
             --bg-dark: #050505;
-            --card-bg: #111111;
+            --card-bg: rgba(20, 20, 20, 0.8);
             --border: #222;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
-        body { background-color: var(--bg-dark); color: white; }
+        
+        /* --- FUNDO MÁGICO ANIMADO --- */
+        body { 
+            background: linear-gradient(-45deg, #050505, #0a1128, #1c0221, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
         /* --- NAVBAR --- */
         nav {
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.9);
             padding: 15px 5%;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--neon-blue);
             position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(10px);
         }
         .logo { font-family: 'Orbitron'; font-weight: 900; color: white; cursor: pointer; }
         .logo span { color: var(--neon-blue); }
+        .menu-icon { font-size: 1.5rem; color: var(--neon-blue); cursor: pointer; }
 
-        /* --- LAYOUT PRINCIPAL --- */
-        .main-wrapper {
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+            background: rgba(0,0,0,0.95); border-left: 2px solid var(--neon-blue);
+            z-index: 2000; transition: 0.5s; padding: 60px 30px;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; }
+        .sidebar ul { list-style: none; }
+        .sidebar ul li { margin: 25px 0; }
+        .sidebar ul li a { 
+            color: white; text-decoration: none; font-family: 'Orbitron'; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+        }
+        .sidebar ul li a:hover { color: var(--neon-blue); padding-left: 10px; }
+
+        /* --- GRID DE PRODUTOS (VITRINE) --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 40px 5%;
             max-width: 1300px;
-            margin: 40px auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            padding: 20px;
+            margin: 0 auto;
         }
-
-        /* COLUNA ESQUERDA: GALERIA E 3D */
-        .product-visuals {
-            flex: 1.5;
-            min-width: 350px;
-        }
-        
-        .main-3d-view {
-            width: 100%;
-            height: 550px;
-            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
-            border-radius: 15px;
-            border: 1px solid var(--border);
-            position: relative;
-        }
-        
-        model-viewer {
-            width: 100%; height: 100%;
-        }
-
-        .thumbnail-bar {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        .thumb {
-            width: 80px; height: 80px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            background: #111;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; color: #555;
-        }
-        .thumb.active { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
-
-        /* COLUNA DIREITA: COMPRA */
-        .product-details {
-            flex: 1;
-            min-width: 350px;
-            padding: 20px;
+        .product-card {
             background: var(--card-bg);
-            border-radius: 15px;
             border: 1px solid var(--border);
-        }
-
-        .brand-name { color: var(--neon-blue); font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 2px; }
-        .product-name { font-family: 'Orbitron'; font-size: 2.5rem; margin: 10px 0; line-height: 1.1; }
-        .price-tag { font-size: 2.5rem; color: var(--neon-green); font-weight: 700; margin: 20px 0; }
-        
-        .info-box {
-            border-top: 1px solid var(--border);
-            padding: 20px 0;
-        }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1rem; }
-        .info-row span:first-child { color: #888; }
-        .info-row span:last-child { color: white; font-weight: bold; }
-
-        /* BOTÕES */
-        .action-area { margin-top: 30px; }
-        .qty-selector {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-        }
-        .qty-btn { 
-            background: #222; border: 1px solid #444; color: white; 
-            width: 40px; height: 40px; cursor: pointer; border-radius: 5px;
-        }
-        .qty-val { font-size: 1.2rem; width: 30px; text-align: center; }
-
-        .btn-buy-main {
-            width: 100%;
-            background: var(--neon-green);
-            color: black;
-            border: none;
+            border-radius: 15px;
             padding: 20px;
-            font-family: 'Orbitron';
-            font-weight: 900;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
+            text-align: center;
             transition: 0.3s;
-            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
         }
-        .btn-buy-main:hover { 
-            background: white; 
-            box-shadow: 0 0 20px rgba(10, 255, 0, 0.4); 
-            transform: scale(1.02);
-        }
+        .product-card:hover { border-color: var(--neon-blue); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
+        .card-img { width: 100%; height: 200px; background: #000; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+        .card-name { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 10px; height: 50px; }
+        .card-price { color: var(--neon-green); font-weight: 700; font-size: 1.3rem; }
 
-        /* MOBILE ADAPT */
-        @media (max-width: 768px) {
-            .main-3d-view { height: 350px; }
-            .product-name { font-size: 1.8rem; }
-        }
+        /* --- DETALHES DO PRODUTO (3D) --- */
+        .main-wrapper { max-width: 1300px; margin: 40px auto; display: flex; flex-wrap: wrap; gap: 30px; padding: 20px; }
+        .product-visuals { flex: 1.5; min-width: 350px; }
+        .main-3d-view { width: 100%; height: 500px; background: rgba(0,0,0,0.5); border-radius: 15px; border: 1px solid var(--border); }
+        .product-details { flex: 1; min-width: 350px; padding: 30px; background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border); }
+        .qty-selector { display: flex; align-items: center; gap: 15px; margin: 25px 0; }
+        .qty-btn { background: #222; border: 1px solid var(--neon-blue); color: white; width: 45px; height: 45px; cursor: pointer; border-radius: 5px; }
+        .qty-val { font-size: 1.5rem; font-family: 'Orbitron'; width: 60px; text-align: center; }
+        .btn-buy-main { width: 100%; background: var(--neon-green); color: black; border: none; padding: 20px; font-family: 'Orbitron'; font-weight: 900; border-radius: 10px; cursor: pointer; }
+
+        @media (max-width: 768px) { .main-3d-view { height: 300px; } .product-name { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">WB <span>3D</span> SOLUTIONS</div>
-    <div><i class="fas fa-bars"></i></div>
-</nav>
-
-<div class="main-wrapper">
-    <div class="product-visuals">
-        <div class="main-3d-view">
-            <model-viewer 
-                id="viewer"
-                src="STEVE.glb" 
-                camera-controls 
-                auto-rotate 
-                shadow-intensity="1" 
-                environment-image="neutral"
-                exposure="1.2">
-            </model-viewer>
-        </div>
-        
-        <div class="thumbnail-bar">
-            <div class="thumb active" onclick="changeView('3D')">
-                <i class="fas fa-cube"></i><br>3D VIEW
-            </div>
-            <div class="thumb">
-                <i class="fas fa-image"></i><br>FOTO 1
-            </div>
-            <div class="thumb">
-                <i class="fas fa-image"></i><br>FOTO 2
-            </div>
-        </div>
-    </div>
-
-    <div class="product-details">
-        <p class="brand-name">PRIMAL COLLECTIBLES</p>
-        <h1 class="product-name">MINECRAFT STEVE BUSTO</h1>
-        
-        <div class="price-tag">R$ 45,00</div>
-
-        <div class="info-box">
-            <div class="info-row"><span>Disponibilidade:</span><span>PRONTA ENTREGA</span></div>
-            <div class="info-row"><span>Escala:</span><span>1/12 (15cm)</span></div>
-            <div class="info-row"><span>Material:</span><span>RESINA PREMIUM</span></div>
-            <div class="info-row"><span>Pintura:</span><span>PRIMER CINZA</span></div>
-        </div>
-
-        <div class="action-area">
-            <div class="qty-selector">
-                <button class="qty-btn">-</button>
-                <div class="qty-val">1</div>
-                <button class="qty-btn">+</button>
-            </div>
-            
-            <button class="btn-buy-main" onclick="checkout()">
-                <i class="fab fa-whatsapp"></i> FINALIZAR PEDIDO
-            </button>
-        </div>
-        
-        <p style="margin-top: 20px; color: #666; font-size: 0.9rem; text-align: center;">
-            <i class="fas fa-shield-alt"></i> Compra Segura via PIX & WhatsApp
-        </p>
-    </div>
+<div class="sidebar" id="sidebar">
+    <i class="fas fa-times close-btn" onclick="toggleMenu()"></i>
+    <ul>
+        <li><a onclick="navegar('home')">INÍCIO</a></li>
+        <li><a onclick="navegar('colecionaveis')">COLECIONÁVEIS</a></li>
+        <li><a onclick="navegar('rpg')">RPG</a></li>
+        <li><a onclick="navegar('funko')">FUNKO POP</a></li>
+        <li><a onclick="navegar('chibi')">CHIBI</a></li>
+    </ul>
 </div>
 
+<nav>
+    <div class="logo" onclick="navegar('home')">WB <span>3D</span> SOLUTIONS</div>
+    <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-ellipsis-v"></i></div>
+</nav>
+
+<div id="content">
+    </div>
+
 <script>
-    function changeView(type) {
-        alert("Visualização " + type + " selecionada!");
-        // Aqui você pode adicionar lógica para trocar o src do model-viewer se tiver outras versões
+    const produtos = {
+        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis", specs: ["15cm", "Resina Premium"] },
+        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko", specs: ["10cm", "Resina Premium"] },
+        'kratos': { name: "KRATOS GOD OF WAR", price: 89.90, model: "Kratos.glb", category: "colecionaveis", specs: ["20cm", "Edição Luxo"] }
+    };
+
+    let quantidade = 1;
+    let produtoAtual = 'steve';
+
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+
+    // FUNÇÃO PARA MOSTRAR A LISTA DE CARDS
+    function mostrarVitrine(filtro = 'home') {
+        const container = document.getElementById('content');
+        let html = `<div class="product-grid">`;
+        
+        for (let id in produtos) {
+            if (filtro === 'home' || produtos[id].category === filtro) {
+                html += `
+                    <div class="product-card" onclick="renderizarProduto('${id}')">
+                        <div class="card-img"><i class="fas fa-cube" style="font-size:3rem; color:var(--neon-blue)"></i></div>
+                        <h3 class="card-name">${produtos[id].name}</h3>
+                        <p class="card-price">R$ ${produtos[id].price.toFixed(2)}</p>
+                    </div>
+                `;
+            }
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+        window.scrollTo(0,0);
+    }
+
+    // FUNÇÃO PARA MOSTRAR O PRODUTO 3D
+    function renderizarProduto(id) {
+        const p = produtos[id];
+        produtoAtual = id;
+        quantidade = 1;
+        const container = document.getElementById('content');
+        
+        container.innerHTML = `
+            <div class="main-wrapper">
+                <div class="product-visuals">
+                    <div class="main-3d-view">
+                        <model-viewer src="${p.model}" camera-controls auto-rotate shadow-intensity="1"></model-viewer>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <p style="color:var(--neon-blue)">WB 3D SOLUTIONS</p>
+                    <h1 class="product-name" style="font-family:Orbitron; margin:10px 0;">${p.name}</h1>
+                    <div class="price-tag">R$ ${p.price.toFixed(2)}</div>
+                    <div class="qty-selector">
+                        <button class="qty-btn" onclick="alterarQty(-1)">-</button>
+                        <div class="qty-val" id="qty">1</div>
+                        <button class="qty-btn" onclick="alterarQty(1)">+</button>
+                    </div>
+                    <button class="btn-buy-main" onclick="checkout()">
+                        <i class="fab fa-whatsapp"></i> COMPRAR AGORA
+                    </button>
+                    <p onclick="mostrarVitrine()" style="margin-top:20px; cursor:pointer; color:gray;"><i class="fas fa-arrow-left"></i> Voltar para vitrine</p>
+                </div>
+            </div>
+        `;
+        window.scrollTo(0,0);
+    }
+
+    function navegar(pagina) {
+        toggleMenu();
+        if (pagina === 'home') mostrarVitrine('home');
+        else mostrarVitrine(pagina);
+    }
+
+    function alterarQty(valor) {
+        quantidade += valor;
+        if (quantidade < 1) quantidade = 1;
+        if (quantidade > 1000) quantidade = 1000;
+        document.getElementById('qty').innerText = quantidade;
     }
 
     function checkout() {
-        const msg = "Olá! Quero comprar o Busto do Steve (R$ 45,00). Como procedo?";
+        const p = produtos[produtoAtual];
+        const msg = `Olá! Quero ${quantidade} unidade(s) do ${p.name}.`;
         window.open(`https://wa.me/5531992994163?text=${encodeURIComponent(msg)}`);
     }
-</script>
 
+    window.onload = () => mostrarVitrine('home');
+</script>
 </body>
 </html>
