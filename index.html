@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D MAKER WORLD - Loja Futurista</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS E VARIÁVEIS --- */
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --neon-green: #0aff00;
+            --bg-dark: #050505;
+            --glass: rgba(20, 20, 20, 0.7);
+            --border-glow: 0 0 10px var(--neon-blue);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        /* --- FUNDO DE VÍDEO --- */
+        .video-background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+        }
+
+        video { 
+            object-fit: cover; 
+            width: 100%; 
+            height: 100%; 
+            opacity: 0.6; /* Deixa o vídeo um pouco mais escuro para ler o texto */
+        }
+
+        /* Grade holográfica sobre o vídeo */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- LOADING IMPRESSORA 3D --- */
+        #printer-loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .loader-hidden { transform: translateY(-100%); }
+
+        .nozzle-container {
+            position: relative;
+            width: 300px;
+            height: 20px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .print-head {
+            width: 20px;
+            height: 20px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+            position: absolute;
+            top: 0;
+            animation: moveHead 1s infinite alternate linear;
+        }
+
+        .printed-bar {
+            height: 100%;
+            background: var(--neon-purple);
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        @keyframes moveHead {
+            0% { left: 0; }
+            100% { left: 280px; }
+        }
+
+        .loading-text {
+            font-family: 'Orbitron';
+            color: var(--neon-blue);
+            letter-spacing: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* --- NAVEGAÇÃO --- */
+        .cyber-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid var(--neon-blue);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .logo { font-family: 'Orbitron'; font-size: 2rem; font-weight: 900; color: white; cursor: pointer; }
+        .logo span { color: var(--neon-blue); }
+
+        .nav-links { display: flex; list-style: none; gap: 40px; }
+        .nav-links li button {
+            background: none; border: none; color: white;
+            font-size: 1.1rem; text-transform: uppercase; cursor: pointer;
+            font-family: 'Orbitron'; transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links li button:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        .nav-links li button::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background: var(--neon-blue);
+            transition: 0.3s;
+        }
+        .nav-links li button:hover::after { width: 100%; }
+
+        /* --- CONTEÚDO PRINCIPAL (GRID) --- */
+        #app-container {
+            padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        /* Card do Produto */
+        .card {
+            background: var(--glass);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            /* Setup da animação de impressão */
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 5px;
+            border-bottom: 2px solid var(--neon-purple);
+        }
+
+        .card-info { padding: 15px 0 5px; text-align: center; }
+        .card h3 { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 10px; }
+        .card .price { color: var(--neon-green); font-size: 1.4rem; font-weight: bold; }
+        
+        /* Botão de download visual */
+        .download-btn {
+            margin-top: 10px;
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 5px 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .card:hover .download-btn { background: var(--neon-blue); color: black; }
+
+        /* Animação de "Building" (Impressão) */
+        .print-animation {
+            animation: buildLayer 0.8s forwards ease-out;
+        }
+
+        @keyframes buildLayer {
+            0% { opacity: 0; clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); transform: translateY(50px); }
+            100% { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateY(0); }
+        }
+
+        /* --- PÁGINA DE DETALHES --- */
+        .detail-view {
+            background: rgba(0,0,0,0.85);
+            border: 2px solid var(--neon-blue);
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            animation: fadeIn 0.5s;
+            flex-wrap: wrap;
+        }
+        
+        .detail-img { flex: 1; max-width: 500px; border: 2px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .detail-info { flex: 1; text-align: left; }
+        .detail-info h1 { font-family: 'Orbitron'; font-size: 3rem; color: var(--neon-blue); margin-bottom: 20px; }
+        .detail-info p { font-size: 1.2rem; line-height: 1.6; margin-bottom: 30px; color: #ddd; }
+        
+        .btn-buy {
+            background: var(--neon-green);
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: 'Orbitron';
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px var(--neon-green);
+            transition: 0.3s;
+        }
+        .btn-buy:hover { background: white; box-shadow: 0 0 40px white; }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .cyber-nav { flex-direction: column; gap: 20px; }
+            .nav-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
+            .detail-view { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-background">
+        <video autoplay muted loop id="bg-video">
+            <source src="https://static.vecteezy.com/system/resources/previews/002/099/840/mp4/abstract-technology-background-loop-free-video.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
+
+    <div id="printer-loader">
+        <div class="nozzle-container">
+            <div class="printed-bar" id="load-bar"></div>
+            <div class="print-head"></div>
+        </div>
+        <h2 class="loading-text">IMPRIMINDO AMBIENTE... <span id="load-percent">0%</span></h2>
+    </div>
+
+    <nav class="cyber-nav">
+        <div class="logo" onclick="carregarPagina('home')">3D <span style="color:var(--neon-blue)">MAKER</span> WORLD</div>
+        <ul class="nav-links">
+            <li><button onclick="carregarPagina('home')">Início</button></li>
+            <li><button onclick="carregarPagina('rpg')">RPG Fantasy</button></li>
+            <li><button onclick="carregarPagina('marvel')">Heroes & Villains</button></li>
+            <li><button onclick="carregarPagina('funko')">Pop Culture</button></li>
+        </ul>
+        <div style="font-size: 1.5rem; color: var(--neon-blue);"><i class="fas fa-cube"></i></div>
+    </nav>
+
+    <main id="app-container">
+        </main>
+
+    <script>
+        // --- BANCO DE DADOS FAKE ---
+        // Aqui você adiciona seus produtos e links de vídeos
+        const db = {
+            home: {
+                video: "https://static.vecteezy.com/system/resources/previews/002/099/840/mp4/abstract-technology-background-loop-free-video.mp4", // Tech Abstrato
+                items: [
+                    { id: 1, name: "Cyber Skull 1:1", price: "R$ 150,00", img: "https://via.placeholder.com/400x400/000000/00f3ff?text=Cyber+Skull" },
+                    { id: 2, name: "Motor V8 Funcional", price: "R$ 80,00", img: "https://via.placeholder.com/400x400/000000/bc13fe?text=V8+Engine" },
+                    { id: 3, name: "Braço Robótico", price: "R$ 200,00", img: "https://via.placeholder.com/400x400/000000/0aff00?text=Robot+Arm" }
+                ]
+            },
+            rpg: {
+                video: "https://static.vecteezy.com/system/resources/previews/001/809/018/mp4/fire-particles-sparks-rising-up-free-video.mp4", // Fogo/Medieval
+                items: [
+                    { id: 4, name: "Ancient Red Dragon", price: "R$ 45,00", img: "https://via.placeholder.com/400x400/330000/ff0000?text=Dragon" },
+                    { id: 5, name: "Orc Warlord", price: "R$ 25,00", img: "https://via.placeholder.com/400x400/002200/00ff00?text=Orc" },
+                    { id: 6, name: "Elven Archer", price: "R$ 25,00", img: "https://via.placeholder.com/400x400/001100/ffff00?text=Elf" }
+                ]
+            },
+            marvel: {
+                video: "https://static.vecteezy.com/system/resources/previews/027/632/679/mp4/hud-futuristic-user-interface-free-video.mp4", // HUD Iron Man Style
+                items: [
+                    { id: 7, name: "Iron Man MK85", price: "R$ 55,00", img: "https://via.placeholder.com/400x400/440000/ffcc00?text=Iron+Man", customVideo: "https://static.vecteezy.com/system/resources/previews/008/493/905/mp4/hologram-hud-interface-loop-video.mp4" },
+                    { id: 8, name: "Batman The Dark Knight", price: "R$ 55,00", img: "https://via.placeholder.com/400x400/111111/555555?text=Batman" },
+                    { id: 9, name: "Deadpool Chibi", price: "R$ 30,00", img: "https://via.placeholder.com/400x400/550000/ffffff?text=Deadpool" }
+                ]
+            },
+            funko: {
+                video: "https://static.vecteezy.com/system/resources/previews/001/905/663/mp4/abstract-colorful-background-free-video.mp4", // Colorido
+                items: [
+                    { id: 10, name: "Base Funko Padrão", price: "R$ 15,00", img: "https://via.placeholder.com/400x400/ffffff/000000?text=Base+Funko" },
+                    { id: 11, name: "Harry Potter Pop", price: "R$ 30,00", img: "https://via.placeholder.com/400x400/220022/ff00ff?text=Harry" }
+                ]
+            }
+        };
+
+        const appContainer = document.getElementById('app-container');
+        const bgVideo = document.getElementById('bg-video');
+        const loader = document.getElementById('printer-loader');
+        const loadBar = document.getElementById('load-bar');
+        const loadPercent = document.getElementById('load-percent');
+
+        // --- FUNÇÃO DE IMPRESSÃO (LOADING) ---
+        function simularImpressao(callback) {
+            loader.classList.remove('loader-hidden');
+            let width = 0;
+            
+            // Simula o tempo de carregar a página/impressão
+            const interval = setInterval(() => {
+                width += Math.floor(Math.random() * 5) + 2; // Velocidade aleatória
+                if (width > 100) width = 100;
+                
+                loadBar.style.width = width + '%';
+                loadPercent.innerText = width + '%';
+
+                if (width === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loader.classList.add('loader-hidden');
+                        if (callback) callback();
+                    }, 500);
+                }
+            }, 50);
+        }
+
+        // --- CARREGAR PÁGINAS ---
+        function carregarPagina(categoria) {
+            // 1. Inicia animação de impressão
+            simularImpressao(() => {
+                // 2. Troca o vídeo de fundo
+                const dados = db[categoria];
+                const source = bgVideo.querySelector('source');
+                if(source.src !== dados.video) {
+                    source.src = dados.video;
+                    bgVideo.load();
+                }
+
+                // 3. Renderiza os produtos
+                appContainer.innerHTML = '<div class="products-grid"></div>';
+                const grid = appContainer.querySelector('.products-grid');
+
+                dados.items.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.animationDelay = `${index * 0.2}s`; // Efeito cascata
+                    card.classList.add('print-animation'); // Adiciona classe de animação
+                    
+                    card.innerHTML = `
+                        <img src="${item.img}" alt="${item.name}">
+                        <div class="card-info">
+                            <h3>${item.name}</h3>
+                            <p class="price">${item.price}</p>
+                            <button class="download-btn">VER STL</button>
+                        </div>
+                    `;
+                    
+                    // Clique no card
+                    card.onclick = () => abrirDetalhes(item, categoria);
+                    grid.appendChild(card);
+                });
+            });
+        }
+
+        // --- PÁGINA DE DETALHES ---
+        function abrirDetalhes(item, categoriaAnterior) {
+            simularImpressao(() => {
+                // Se o item tiver vídeo específico, troca
+                if(item.customVideo) {
+                    const source = bgVideo.querySelector('source');
+                    source.src = item.customVideo;
+                    bgVideo.load();
+                }
+
+                appContainer.innerHTML = `
+                    <div class="detail-view">
+                        <img src="${item.img}" class="detail-img print-animation">
+                        <div class="detail-info print-animation" style="animation-delay: 0.3s">
+                            <button class="btn-back" onclick="carregarPagina('${categoriaAnterior}')"> < VOLTAR</button>
+                            <h1>${item.name}</h1>
+                            <p>Arquivo STL premium verificado. Pronto para impressão em resina ou filamento. Suportes pré-configurados inclusos no pacote.</p>
+                            <p class="price" style="font-size: 2rem; color: var(--neon-green); margin-bottom: 20px;">${item.price}</p>
+                            <button class="btn-buy" onclick="alert('Redirecionando para checkout...')">COMPRAR AGORA</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- INICIALIZAÇÃO ---
+        window.onload = () => {
+            carregarPagina('home');
+        };
+
+    </script>
+</body>
+</html>
