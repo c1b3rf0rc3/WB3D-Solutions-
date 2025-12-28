@@ -7,6 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
     <style>
         :root {
             --neon-blue: #00f3ff;
@@ -19,10 +22,33 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
         body { background-color: var(--bg-dark); color: white; overflow-x: hidden; min-height: 100vh; }
 
-        /* --- FUNDO DE VÍDEO --- */
-        .video-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
-        video { object-fit: cover; width: 100%; height: 100%; opacity: 0.4; transition: opacity 1.2s; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, black 120%); z-index: -1; }
+        /* --- FUNDO ANIMADO (PAPEL DE PAREDE DINÂMICO) --- */
+        .video-background { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -2; 
+            overflow: hidden;
+        }
+        video { 
+            object-fit: cover; 
+            width: 100vw; 
+            height: 100vh; 
+            opacity: 0.5; 
+            filter: brightness(0.6) contrast(1.2);
+            transition: opacity 1.5s ease-in-out; 
+        }
+        .overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(45deg, rgba(0,0,0,0.9) 0%, transparent 100%); 
+            z-index: -1; 
+        }
 
         /* --- LOADING --- */
         #printer-loader {
@@ -46,32 +72,42 @@
         .nav-links button { background: none; border: none; color: white; font-size: 1rem; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron'; transition: 0.3s; }
         .nav-links button:hover { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        /* --- GRID --- */
+        /* --- GRID E CARDS --- */
         #app-container { padding: 40px; max-width: 1200px; margin: 0 auto; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .card { background: var(--glass); border: 1px solid #333; border-radius: 12px; padding: 15px; transition: 0.4s; cursor: pointer; opacity: 0; }
-        .card:hover { border-color: var(--neon-blue); transform: translateY(-5px); }
-        .card img { width: 100%; height: 280px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
-        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon-blue); }
+        
+        .card { 
+            background: var(--glass); 
+            border: 1px solid #333; 
+            border-radius: 12px; 
+            padding: 15px; 
+            transition: 0.4s; 
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover { border-color: var(--neon-blue); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
+        
+        /* Estilo do Visualizador 3D nos Cards */
+        model-viewer {
+            width: 100%;
+            height: 280px;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            --poster-color: transparent;
+        }
+
+        .card h3 { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--neon-blue); margin-top: 10px; }
         .card .price { color: var(--neon-green); font-size: 1.3rem; font-weight: bold; margin-top: 5px; }
 
-        /* --- CHECKOUT / CARTEIRA DIGITAL --- */
+        /* --- CHECKOUT --- */
         .pix-checkout {
             background: var(--glass); border: 2px solid var(--neon-green); padding: 30px;
             border-radius: 20px; text-align: center; max-width: 500px; margin: 0 auto;
-            animation: buildLayer 0.6s forwards;
         }
-        .qr-placeholder { background: white; width: 200px; height: 200px; margin: 20px auto; padding: 10px; border-radius: 10px; }
-        .pix-key-box {
-            background: rgba(0,0,0,0.5); border: 1px dashed var(--neon-green);
-            padding: 15px; margin: 20px 0; font-family: 'Orbitron'; color: var(--neon-green);
-            cursor: pointer; position: relative;
-        }
-        .pix-key-box:active { transform: scale(0.98); }
-
+        
         .btn-buy { background: var(--neon-green); color: black; border: none; padding: 18px 45px; font-size: 1.2rem; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; border-radius: 5px; margin-top: 25px; transition: 0.3s; width: 100%; }
         .btn-buy:hover { background: white; box-shadow: 0 0 20px white; }
-        .btn-back { background: none; border: 1px solid #fff; color: #fff; padding: 8px 20px; cursor: pointer; margin-bottom: 20px; }
 
         .print-animation { animation: buildLayer 0.6s forwards ease-out; }
         @keyframes buildLayer { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -88,7 +124,7 @@
 
     <div id="printer-loader">
         <div class="nozzle-container"><div class="printed-bar" id="load-bar"></div></div>
-        <h2 class="loading-text">INICIALIZANDO WB 3D SOLUTIONS... <span id="load-percent">0%</span></h2>
+        <h2 class="loading-text">IMPRIMINDO INTERFACE... <span id="load-percent">0%</span></h2>
     </div>
 
     <nav class="cyber-nav">
@@ -106,31 +142,122 @@
     <script>
         const MINHA_CHAVE_PIX = "31992994163"; 
 
+        // Adicionei links de modelos 3D de exemplo (arquivos .glb)
+        // Se você não tiver o arquivo .glb, ele mostrará a imagem (poster)
         const db = {
             home: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-blue-mesh-23363-large.mp4",
                 items: [
-                    { id: 1, name: "Loki Throne STL", price: "R$ 55,00", img: "https://i.ibb.co/Xrn3y7vj/Gemini-Generated-Image-tvyr86tvyr86tvyr.jpg" },
-                    { id: 2, name: "Baby Stitch Articulado", price: "R$ 35,00", img: "https://i.ibb.co/yBSB1Vp4/Gemini-Generated-Image-v6qclcv6qclcv6qc.jpg" },
-                    { id: 3, name: "Mago Supremo RPG", price: "R$ 40,00", img: "https://i.ibb.co/6R2MvR4M/Gemini-Generated-Image-77f50p77f50p77f5.jpg" },
-                    { id: 4, name: "Action Figure Sci-Fi", price: "R$ 60,00", img: "https://i.ibb.co/r2B7P0WJ/Gemini-Generated-Image-8sc4re8sc4re8sc4.jpg" }
+                    { id: 1, name: "Loki Throne STL", price: "55,00", model: "", img: "https://i.ibb.co/Xrn3y7vj/Gemini-Generated-Image-tvyr86tvyr86tvyr.jpg" },
+                    { id: 2, name: "Baby Stitch Articulado", price: "35,00", model: "https://modelviewer.dev/shared-assets/models/Astronaut.glb", img: "https://i.ibb.co/yBSB1Vp4/Gemini-Generated-Image-v6qclcv6qclcv6qc.jpg" },
+                    { id: 3, name: "Mago Supremo RPG", price: "40,00", model: "", img: "https://i.ibb.co/6R2MvR4M/Gemini-Generated-Image-77f50p77f50p77f5.jpg" },
+                    { id: 4, name: "Action Figure Sci-Fi", price: "60,00", model: "", img: "https://i.ibb.co/r2B7P0WJ/Gemini-Generated-Image-8sc4re8sc4re8sc4.jpg" }
                 ]
             },
             rpg: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-fire-and-smoke-particles-in-the-dark-32863-large.mp4",
                 items: [
-                    { id: 5, name: "Mago Elemental", price: "R$ 40,00", img: "https://i.ibb.co/6R2MvR4M/Gemini-Generated-Image-77f50p77f50p77f5.jpg" },
-                    { id: 6, name: "Guerreiro Futurista", price: "R$ 50,00", img: "https://i.ibb.co/r2B7P0WJ/Gemini-Generated-Image-8sc4re8sc4re8sc4.jpg" }
+                    { id: 5, name: "Mago Elemental", price: "40,00", model: "", img: "https://i.ibb.co/6R2MvR4M/Gemini-Generated-Image-77f50p77f50p77f5.jpg" },
+                    { id: 6, name: "Guerreiro Futurista", price: "50,00", model: "", img: "https://i.ibb.co/r2B7P0WJ/Gemini-Generated-Image-8sc4re8sc4re8sc4.jpg" }
                 ]
             },
             marvel: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-animation-of-futuristic-circuits-9141-large.mp4",
                 items: [
-                    { id: 7, name: "Loki No Trono", price: "R$ 55,00", img: "https://i.ibb.co/Xrn3y7vj/Gemini-Generated-Image-tvyr86tvyr86tvyr.jpg", customVideo: "https://assets.mixkit.co/videos/preview/mixkit-technological-shining-circles-loop-2742-large.mp4" },
-                    { id: 8, name: "Homem de Ferro MK85", price: "R$ 55,00", img: "https://images.unsplash.com/photo-1623939012331-989795002281?w=400" }
+                    { id: 7, name: "Loki No Trono", price: "55,00", model: "", img: "https://i.ibb.co/Xrn3y7vj/Gemini-Generated-Image-tvyr86tvyr86tvyr.jpg" }
                 ]
             },
             funko: {
                 video: "https://assets.mixkit.co/videos/preview/mixkit-colorful-abstract-spheres-moving-2741-large.mp4",
                 items: [
-                    { id: 9, name: "Stitch Blue", price: "R$ 35,00", img: "
+                    { id: 9, name: "Stitch Blue", price: "35,00", model: "", img: "https://i.ibb.co/yBSB1Vp4/Gemini-Generated-Image-v6qclcv6qclcv6qc.jpg" }
+                ]
+            }
+        };
+
+        function carregarPagina(cat) {
+            const container = document.getElementById('app-container');
+            const videoBg = document.getElementById('bg-video');
+            const data = db[cat];
+
+            // Troca o vídeo de fundo (Papel de parede dinâmico)
+            videoBg.style.opacity = 0;
+            setTimeout(() => {
+                videoBg.src = data.video;
+                videoBg.style.opacity = 0.5;
+            }, 500);
+
+            let html = `<div class="products-grid">`;
+            data.items.forEach((item, index) => {
+                html += `
+                    <div class="card print-animation" style="animation-delay: ${index * 0.1}s">
+                        <model-viewer 
+                            src="${item.model}" 
+                            poster="${item.img}"
+                            alt="${item.name}"
+                            auto-rotate 
+                            camera-controls 
+                            shadow-intensity="1"
+                            loading="lazy">
+                        </model-viewer>
+                        <h3>${item.name}</h3>
+                        <p class="price">R$ ${item.price}</p>
+                        <button class="btn-buy" onclick="abrirCheckout('${item.name}', '${item.price}')">COMPRAR</button>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function abrirCheckout(nome, preco) {
+            const container = document.getElementById('app-container');
+            container.innerHTML = `
+                <div class="pix-checkout print-animation">
+                    <button class="btn-back" onclick="carregarPagina('home')">← VOLTAR</button>
+                    <h2>FINALIZAR PEDIDO</h2>
+                    <p>${nome}</p>
+                    <div class="qr-placeholder">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PagamentoWB3D" alt="QR Code">
+                    </div>
+                    <div class="pix-key-box" onclick="copiarPix()">
+                        ${MINHA_CHAVE_PIX}
+                        <br><small>(Clique para copiar chave)</small>
+                    </div>
+                    <p class="price">TOTAL: R$ ${preco}</p>
+                    <button class="btn-buy" style="background: #25d366; color: white;" onclick="confirmarZap('${nome}')">
+                        <i class="fab fa-whatsapp"></i> ENVIAR COMPROVANTE
+                    </button>
+                </div>
+            `;
+        }
+
+        function copiarPix() {
+            navigator.clipboard.writeText(MINHA_CHAVE_PIX);
+            alert("Chave PIX copiada!");
+        }
+
+        function confirmarZap(produto) {
+            const msg = `Olá! Acabei de realizar o pagamento do produto: ${produto}. Segue o comprovante!`;
+            window.open(`https://wa.me/5531992994163?text=${encodeURIComponent(msg)}`);
+        }
+
+        // Simulação de Loading de Impressora 3D
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    document.getElementById('printer-loader').classList.add('loader-hidden');
+                    carregarPagina('home');
+                }, 500);
+            }
+            document.getElementById('load-bar').style.width = progress + '%';
+            document.getElementById('load-percent').innerText = Math.floor(progress) + '%';
+        }, 150);
+
+    </script>
+</body>
+</html>
