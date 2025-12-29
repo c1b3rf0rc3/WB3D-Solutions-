@@ -14,7 +14,7 @@
             --neon-blue: #00F0FF;
             --neon-purple: #6F2CFF;
             --bg-dark: #05080F;
-            --card-bg: rgba(11, 28, 45, 0.85);
+            --card-bg: rgba(11, 28, 45, 0.75);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
@@ -45,182 +45,34 @@
         .nav-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .logo { font-family: 'Orbitron'; font-weight: 900; font-size: 1.6rem; cursor: pointer; letter-spacing: 2px; }
         .logo span { color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+        .menu-icon { cursor: pointer; font-size: 1.5rem; color: var(--neon-blue); }
 
-        /* --- FORMULÁRIO DE CHECKOUT --- */
-        .checkout-container {
-            max-width: 900px; margin: 40px auto; padding: 30px;
-            background: var(--card-bg); border-radius: 20px;
-            border: 1px solid var(--neon-blue); box-shadow: 0 0 30px rgba(0,240,255,0.2);
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+            background: rgba(5, 8, 15, 0.98); border-left: 2px solid var(--neon-blue);
+            z-index: 2000; transition: 0.5s; padding: 60px 30px;
         }
+        .sidebar.active { right: 0; }
+        .sidebar ul li { list-style: none; margin: 30px 0; }
+        .sidebar ul li a { color: white; text-decoration: none; font-family: 'Orbitron'; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .sidebar ul li a:hover { color: var(--neon-blue); }
 
-        .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--neon-blue); }
-        .form-group input {
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(0,240,255,0.3); border-radius: 8px;
-            color: white; outline: none; transition: 0.3s;
+        /* --- HERO SECTION --- */
+        .hero-section {
+            height: 80vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 0 10%;
         }
-        .form-group input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
-
-        .payment-card-visual {
-            background: linear-gradient(135deg, #1b0f3b, #6f2cff);
-            padding: 20px; border-radius: 15px; margin-bottom: 20px;
-            text-transform: uppercase; font-family: 'Orbitron'; letter-spacing: 2px;
+        .hero-section h1 {
+            font-family: 'Orbitron'; font-size: 3.5rem; margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff, var(--neon-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .hero-section p { font-size: 1.4rem; max-width: 700px; color: rgba(255,255,255,0.7); margin-bottom: 40px; }
 
-        /* --- BOTÃO --- */
-        .btn-pay {
-            background: #00FF88; color: #05080F; border: none;
-            padding: 20px; width: 100%; border-radius: 12px;
-            font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
-            font-size: 1.2rem; transition: 0.4s; margin-top: 20px;
-        }
-        .btn-pay:hover { background: #00CC6E; transform: scale(1.02); }
-
-        /* --- MODAL SUCESSO --- */
-        #success-screen {
-            position: fixed; inset: 0; background: var(--bg-dark);
-            display: none; flex-direction: column; align-items: center;
-            justify-content: center; z-index: 5000; text-align: center;
-        }
-
-        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 40px 5%; }
-        .product-card { background: var(--card-bg); border-radius: 18px; padding: 25px; text-align: center; border: 1px solid rgba(0,240,255,0.2); cursor: pointer; }
-
-        @media (max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="nav-top">
-        <div class="logo" onclick="irParaHome()">WB <span>3D</span> SOLUTIONS</div>
-        <div class="menu-icon"><i class="fas fa-bars"></i></div>
-    </div>
-</nav>
-
-<div id="content"></div>
-
-<div id="success-screen">
-    <i class="fas fa-check-circle" style="font-size: 5rem; color: #00FF88; margin-bottom: 20px;"></i>
-    <h1 style="font-family: Orbitron;">PAGAMENTO APROVADO!</h1>
-    <p style="margin: 20px 0;">O teleporte do seu produto foi iniciado. Você receberá o código de rastreio por e-mail.</p>
-    <button class="btn-pay" style="width: auto; padding: 15px 40px;" onclick="location.reload()">VOLTAR À LOJA</button>
-</div>
-
-<script>
-    const produtos = {
-        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis" },
-        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko" },
-        'kratos': { name: "KRATOS GOD OF WAR", price: 89.90, model: "Kratos.glb", category: "colecionaveis" }
-    };
-
-    function irParaHome() {
-        let html = `<div class="product-grid">`;
-        for (let id in produtos) {
-            html += `
-                <div class="product-card" onclick="abrirCheckout('${id}')">
-                    <model-viewer src="${produtos[id].model}" auto-rotate style="width:100%; height:200px;"></model-viewer>
-                    <h3 style="margin-top:15px;">${produtos[id].name}</h3>
-                    <p style="color:var(--neon-blue); font-weight:bold;">R$ ${produtos[id].price.toFixed(2)}</p>
-                </div>`;
-        }
-        html += `</div>`;
-        document.getElementById('content').innerHTML = html;
-    }
-
-    function abrirCheckout(id) {
-        const p = produtos[id];
-        document.getElementById('content').innerHTML = `
-            <div class="checkout-container">
-                <h2 style="font-family: Orbitron; margin-bottom: 30px; text-align: center;">FINALIZAR AQUISIÇÃO</h2>
-                
-                <div class="checkout-grid">
-                    <div>
-                        <h3 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-truck"></i> ENDEREÇO DE ENTREGA</h3>
-                        <div class="form-group">
-                            <label>NOME COMPLETO</label>
-                            <input type="text" placeholder="Nome do Destinatário">
-                        </div>
-                        <div class="form-group">
-                            <label>CEP</label>
-                            <input type="text" placeholder="00000-000">
-                        </div>
-                        <div class="form-group">
-                            <label>RUA E NÚMERO</label>
-                            <input type="text" placeholder="Ex: Av. Galáctica, 101">
-                        </div>
-                        <div class="form-group">
-                            <label>E-MAIL PARA RASTREIO</label>
-                            <input type="email" placeholder="seuemail@exemplo.com">
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> PAGAMENTO SEGURO</h3>
-                        <div class="payment-card-visual">
-                            <div style="font-size: 0.7rem; opacity: 0.8;">Cartão de Crédito</div>
-                            <div style="margin: 15px 0; font-size: 1.2rem;">**** **** **** ****</div>
-                            <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
-                                <span>VALIDADE: --/--</span>
-                                <span>CVV: ***</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>NÚMERO DO CARTÃO</label>
-                            <input type="text" placeholder="0000 0000 0000 0000">
-                        </div>
-                        <div class="checkout-grid" style="gap: 10px;">
-                            <div class="form-group">
-                                <label>VALIDADE</label>
-                                <input type="text" placeholder="MM/AA">
-                            </div>
-                            <div class="form-group">
-                                <label>CVV</label>
-                                <input type="text" placeholder="123">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>PARCELAMENTO</label>
-                            <select style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(0,240,255,0.3); color:white; border-radius:8px;">
-                                <option>1x de R$ ${p.price.toFixed(2)} (Sem juros)</option>
-                                <option>2x de R$ ${(p.price/2).toFixed(2)}</option>
-                                <option>3x de R$ ${(p.price/3).toFixed(2)}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(0,240,255,0.2); margin-top: 20px; padding-top: 20px;">
-                    <div style="display: flex; justify-content: space-between; font-family: Orbitron; font-size: 1.4rem;">
-                        <span>TOTAL:</span>
-                        <span style="color: #00FF88;">R$ ${p.price.toFixed(2)}</span>
-                    </div>
-                    <button class="btn-pay" onclick="processarPagamento()">EFETUAR PAGAMENTO AGORA</button>
-                    <p style="text-align: center; font-size: 0.8rem; margin-top: 15px; opacity: 0.6;">
-                        <i class="fas fa-shield-alt"></i> Ambiente Criptografado e Seguro
-                    </p>
-                </div>
-            </div>
-        `;
-    }
-
-    function processarPagamento() {
-        // Aqui entraria a integração com a API (Mercado Pago, por exemplo)
-        // Por enquanto, simulamos o processamento
-        const btn = document.querySelector('.btn-pay');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSANDO NA REDE...';
-        btn.disabled = true;
-
-        setTimeout(() => {
-            document.getElementById('success-screen').style.display = 'flex';
-        }, 3000);
-    }
-
-    window.onload = irParaHome;
-</script>
-</body>
-</html>
+        .btn-portal {
+            background: transparent; border: 1px solid var(--neon-blue);
+            padding: 15px 40px; color: var(--neon-blue); font-family: 'Orbitron';
+            text-transform: uppercase; letter-spacing: 3px; cursor: pointer;
+            transition:
