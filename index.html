@@ -139,26 +139,22 @@
 <div id="success-screen">
     <i class="fas fa-check-circle" style="font-size: 5rem; color: #00FF88; margin-bottom: 20px;"></i>
     <h1 id="success-title" style="font-family: Orbitron;">PEDIDO REGISTRADO!</h1>
-    <p id="success-msg" style="margin: 20px 0; max-width: 500px; padding: 0 20px;">Redirecionando para o WhatsApp para confirmar os detalhes técnicos...</p>
+    <p id="success-msg" style="margin: 20px 0; max-width: 500px; padding: 0 20px;">Redirecionando para o ambiente seguro de pagamento...</p>
     <button class="btn-pay" style="width: auto; padding: 15px 40px;" onclick="location.reload()">VOLTAR AO INÍCIO</button>
 </div>
 
 <script>
-    // CONFIGURAÇÕES PRINCIPAIS
-    const numeroWhatsApp = "5531992994163"; 
-    
-    // Quando você criar a conta no Mercado Pago, você criará "Links de Pagamento" para cada valor.
-    // Você colocará esses links aqui:
+    // CONFIGURAÇÕES PRINCIPAIS - ADICIONE SEUS LINKS DO MERCADO PAGO AQUI
     const produtos = {
-        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis", mp_link: "#" },
-        'ironman': { name: "IRON MAN MARK 85", price: 110.00, model: "Ironman.glb", category: "colecionaveis", mp_link: "#" },
-        'batman': { name: "BATMAN BUST", price: 95.00, model: "Batman.glb", category: "colecionaveis", mp_link: "#" },
-        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko", mp_link: "#" },
-        'vader': { name: "DARTH VADER FUNKO", price: 65.00, model: "Vader.glb", category: "funko", mp_link: "#" },
-        'yoda': { name: "BABY YODA FUNKO", price: 50.00, model: "Yoda.glb", category: "funko", mp_link: "#" },
-        'dragon': { name: "DRAGÃO DE RPG", price: 120.00, model: "Dragon.glb", category: "rpg", mp_link: "#" },
-        'warrior': { name: "GUERREIRO NÓRDICO", price: 40.00, model: "Warrior.glb", category: "rpg", mp_link: "#" },
-        'mage': { name: "MAGO ÉLFICO", price: 40.00, model: "Mage.glb", category: "rpg", mp_link: "#" }
+        'steve': { name: "MINECRAFT STEVE BUSTO", price: 45.00, model: "STEVE.glb", category: "colecionaveis", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'ironman': { name: "IRON MAN MARK 85", price: 110.00, model: "Ironman.glb", category: "colecionaveis", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'batman': { name: "BATMAN BUST", price: 95.00, model: "Batman.glb", category: "colecionaveis", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'thanos': { name: "THANOS FUNKO POP", price: 55.00, model: "Thanos Funko.glb", category: "funko", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'vader': { name: "DARTH VADER FUNKO", price: 65.00, model: "Vader.glb", category: "funko", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'yoda': { name: "BABY YODA FUNKO", price: 50.00, model: "Yoda.glb", category: "funko", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'dragon': { name: "DRAGÃO DE RPG", price: 120.00, model: "Dragon.glb", category: "rpg", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'warrior': { name: "GUERREIRO NÓRDICO", price: 40.00, model: "Warrior.glb", category: "rpg", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" },
+        'mage': { name: "MAGO ÉLFICO", price: 40.00, model: "Mage.glb", category: "rpg", mp_link: "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO" }
     };
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -200,7 +196,7 @@
         const p = produtos[id];
         document.getElementById('content').innerHTML = `
             <div class="form-container">
-                <h2 style="font-family: Orbitron; margin-bottom: 30px; text-align: center;">CHECKOUT GALÁCTICO</h2>
+                <h2 style="font-family: Orbitron; margin-bottom: 30px; text-align: center;">CHECKOUT SEGURO</h2>
                 <div class="form-grid">
                     <div>
                         <h3 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-user"></i> SEUS DADOS</h3>
@@ -215,17 +211,12 @@
                 </div>
                 
                 <p style="font-size: 0.8rem; margin-top: 20px; text-align: center; color: var(--neon-blue);">
-                    <i class="fas fa-shield-alt"></i> Pagamento processado pelo Mercado Pago (Crédito, Débito, Pix ou Boleto).
+                    <i class="fas fa-shield-alt"></i> Pagamento processado pelo Mercado Pago (Crédito, Débito ou Pix).
                 </p>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <button class="btn-pay btn-mercado-pago" onclick="processarPagamento('${id}')">
-                        <i class="fas fa-credit-card"></i> PAGAR AGORA
-                    </button>
-                    <button class="btn-pay" style="background: transparent; border: 1px solid #25D366; color: #25D366;" onclick="enviarWhatsAppCompra('${id}')">
-                        <i class="fab fa-whatsapp"></i> PEDIR PELO WHATS
-                    </button>
-                </div>
+                <button class="btn-pay btn-mercado-pago" onclick="processarPagamento('${id}')">
+                    <i class="fas fa-lock"></i> FINALIZAR E PAGAR AGORA
+                </button>
             </div>
         `;
         window.scrollTo(0,0);
@@ -237,42 +228,19 @@
         const end = document.getElementById('c-end').value;
 
         if(!nome || !end) {
-            alert("Por favor, preencha os dados de entrega antes de pagar.");
+            alert("Por favor, preencha o Nome e o Endereço para a entrega.");
             return;
         }
 
-        // No futuro, aqui você colocará: window.location.href = p.mp_link;
-        alert("Integração: Quando sua conta Mercado Pago estiver pronta, o cliente será levado para o pagamento de R$ " + p.price.toFixed(2));
-        
-        // Simulação de fluxo: Envia os dados para você saber que alguém tentou pagar
-        enviarWhatsAppCompra(id, true);
-    }
-
-    function enviarWhatsAppCompra(id, tentouPagar = false) {
-        const p = produtos[id];
-        const nome = document.getElementById('c-nome').value;
-        const end = document.getElementById('c-end').value;
-
-        if(!nome || !end) {
-            alert("Preencha os campos para continuarmos.");
+        if(p.mp_link === "#" || p.mp_link === "COLOQUE_AQUI_O_LINK_DO_MERCADO_PAGO") {
+            alert("Erro técnico: Link de pagamento não configurado pelo administrador.");
             return;
         }
 
-        const status = tentouPagar ? "SOLICITOU LINK DE PAGAMENTO / PAGANDO" : "QUER COMBINAR VIA WHATSAPP";
-
-        const mensagem = `*NOVA INTENÇÃO DE COMPRA*%0A%0A` + 
-                         `*Status:* ${status}%0A` +
-                         `*Produto:* ${p.name}%0A` +
-                         `*Valor:* R$ ${p.price.toFixed(2)}%0A` +
-                         `---%0A` +
-                         `*Cliente:* ${nome}%0A` +
-                         `*Endereço:* ${end}`;
-
-        window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagem}`, '_blank');
-        document.getElementById('success-screen').style.display = 'flex';
+        // Abre o link de pagamento do Mercado Pago em uma nova aba
+        window.location.href = p.mp_link;
     }
 
-    // Função para Personalizados (segue o mesmo padrão)
     function abrirPersonalizado() {
         if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
         document.getElementById('content').innerHTML = `
@@ -294,27 +262,5 @@
                         <div class="form-group"><label>DESCRIÇÃO</label><textarea id="p-desc"></textarea></div>
                     </div>
                 </div>
-                <button class="btn-pay" style="background:var(--neon-purple); color:white;" onclick="enviarWhatsAppPersonalizado()">
-                    <i class="fab fa-whatsapp"></i> ENVIAR PARA ORÇAMENTO
-                </button>
-            </div>
-        `;
-        window.scrollTo(0,0);
-    }
-
-    function enviarWhatsAppPersonalizado() {
-        const nome = document.getElementById('p-nome').value;
-        const mat = document.getElementById('p-material').value;
-        const desc = document.getElementById('p-desc').value;
-
-        if(!nome || !desc) { alert("Preencha os campos."); return; }
-
-        const msg = `*ORÇAMENTO 3D PERSONALIZADO*%0A*Cliente:* ${nome}%0A*Material:* ${mat}%0A*Descrição:* ${desc}`;
-        window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${msg}`, '_blank');
-        document.getElementById('success-screen').style.display = 'flex';
-    }
-
-    window.onload = irParaHome;
-</script>
-</body>
-</html>
+                <button class="btn-pay" style="background:var(--neon-purple); color:white;" onclick="alert('Solicitação recebida! Envie as imagens pelo chat para orçamento.')">
+                    <i class="fas fa-paper
