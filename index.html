@@ -14,7 +14,7 @@
             --neon-blue: #00F0FF;
             --neon-purple: #6F2CFF;
             --bg-dark: #05080F;
-            --card-bg: rgba(11, 28, 45, 0.75);
+            --card-bg: rgba(11, 28, 45, 0.85);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
@@ -46,88 +46,69 @@
         .logo { font-family: 'Orbitron'; font-weight: 900; font-size: 1.6rem; cursor: pointer; letter-spacing: 2px; }
         .logo span { color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
 
-        .search-container {
-            width: 100%; display: flex; align-items: center;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(0,240,255,0.3);
-            border-radius: 50px; padding: 5px 20px; transition: 0.4s;
-        }
-        .search-container input {
-            background: transparent; border: none; color: white; width: 100%;
-            padding: 12px; font-size: 1.1rem; outline: none;
+        /* --- FORMULÁRIO DE CHECKOUT --- */
+        .checkout-container {
+            max-width: 900px; margin: 40px auto; padding: 30px;
+            background: var(--card-bg); border-radius: 20px;
+            border: 1px solid var(--neon-blue); box-shadow: 0 0 30px rgba(0,240,255,0.2);
         }
 
-        /* --- SEÇÃO SOBRE (MODERNA) --- */
-        .about-container {
-            max-width: 1000px; margin: 50px auto; padding: 40px;
-            background: var(--card-bg); border: 1px solid var(--neon-blue);
-            border-radius: 20px; backdrop-filter: blur(15px);
-            animation: fadeIn 1s ease-out;
+        .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--neon-blue); }
+        .form-group input {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,240,255,0.3); border-radius: 8px;
+            color: white; outline: none; transition: 0.3s;
         }
-        .about-header { font-family: 'Orbitron'; color: var(--neon-blue); margin-bottom: 25px; font-size: 2.2rem; text-align: center; }
-        .about-text { font-size: 1.2rem; line-height: 1.8; color: rgba(234, 246, 255, 0.9); text-align: justify; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; text-align: center; }
-        .stat-item h3 { font-family: 'Orbitron'; font-size: 2rem; color: var(--neon-blue); }
-        .stat-item p { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .form-group input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- HOME --- */
-        .hero-section {
-            height: 70vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
-            padding: 0 10%; z-index: 2; position: relative;
-        }
-        .hero-section h1 { font-family: 'Orbitron'; font-size: 3.5rem; margin-bottom: 20px; color: white; }
-
-        /* --- PRODUTOS --- */
-        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
-        .product-card { background: var(--card-bg); border-radius: 18px; padding: 25px; text-align: center; border: 1px solid rgba(0,240,255,0.2); transition: 0.4s; cursor: pointer; }
-        .product-card:hover { transform: translateY(-10px); border-color: var(--neon-blue); }
-
-        /* --- SIDEBAR --- */
-        .sidebar {
-            position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
-            background: rgba(5, 8, 15, 0.98); border-left: 2px solid var(--neon-blue);
-            z-index: 2000; transition: 0.5s; padding: 60px 30px;
-        }
-        .sidebar.active { right: 0; }
-        .sidebar ul li { list-style: none; margin: 30px 0; }
-        .sidebar ul li a { color: white; text-decoration: none; font-family: 'Orbitron'; font-size: 1.1rem; cursor: pointer; }
-        .sidebar ul li a:hover { color: var(--neon-blue); }
-
-        .btn-galaxy {
-            background: linear-gradient(135deg, #00F0FF, #6F2CFF);
-            border: none; padding: 15px 30px; color: #05080F; font-weight: bold; border-radius: 10px; cursor: pointer;
+        .payment-card-visual {
+            background: linear-gradient(135deg, #1b0f3b, #6f2cff);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px;
+            text-transform: uppercase; font-family: 'Orbitron'; letter-spacing: 2px;
         }
 
-        @media (max-width: 768px) { .product-grid, .stats-grid { grid-template-columns: 1fr; } .hero-section h1 { font-size: 2.5rem; } }
+        /* --- BOTÃO --- */
+        .btn-pay {
+            background: #00FF88; color: #05080F; border: none;
+            padding: 20px; width: 100%; border-radius: 12px;
+            font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
+            font-size: 1.2rem; transition: 0.4s; margin-top: 20px;
+        }
+        .btn-pay:hover { background: #00CC6E; transform: scale(1.02); }
+
+        /* --- MODAL SUCESSO --- */
+        #success-screen {
+            position: fixed; inset: 0; background: var(--bg-dark);
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center; z-index: 5000; text-align: center;
+        }
+
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 40px 5%; }
+        .product-card { background: var(--card-bg); border-radius: 18px; padding: 25px; text-align: center; border: 1px solid rgba(0,240,255,0.2); cursor: pointer; }
+
+        @media (max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="sidebar" id="sidebar">
-    <i class="fas fa-times" onclick="toggleMenu()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size: 1.5rem;"></i>
-    <ul>
-        <li><a onclick="irParaHome()">INÍCIO</a></li>
-        <li><a onclick="irParaSobre()">SOBRE A WB 3D</a></li>
-        <li><a onclick="navegar('colecionaveis')">COLECIONÁVEIS</a></li>
-        <li><a onclick="navegar('rpg')">RPG</a></li>
-        <li><a onclick="navegar('funko')">FUNKO POP</a></li>
-    </ul>
-</div>
-
 <nav>
     <div class="nav-top">
         <div class="logo" onclick="irParaHome()">WB <span>3D</span> SOLUTIONS</div>
-        <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-    </div>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Inicie uma busca inteligente..." onkeyup="if(event.key==='Enter') realizarBusca()">
-        <i class="fas fa-search" onclick="realizarBusca()"></i>
+        <div class="menu-icon"><i class="fas fa-bars"></i></div>
     </div>
 </nav>
 
 <div id="content"></div>
+
+<div id="success-screen">
+    <i class="fas fa-check-circle" style="font-size: 5rem; color: #00FF88; margin-bottom: 20px;"></i>
+    <h1 style="font-family: Orbitron;">PAGAMENTO APROVADO!</h1>
+    <p style="margin: 20px 0;">O teleporte do seu produto foi iniciado. Você receberá o código de rastreio por e-mail.</p>
+    <button class="btn-pay" style="width: auto; padding: 15px 40px;" onclick="location.reload()">VOLTAR À LOJA</button>
+</div>
 
 <script>
     const produtos = {
@@ -136,105 +117,107 @@
         'kratos': { name: "KRATOS GOD OF WAR", price: 89.90, model: "Kratos.glb", category: "colecionaveis" }
     };
 
-    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-
     function irParaHome() {
-        document.getElementById('content').innerHTML = `
-            <div class="hero-section">
-                <h1>SISTEMA OPERACIONAL WB 3D</h1>
-                <p style="font-size:1.2rem; margin-bottom:30px; opacity:0.8;">Engenharia de precisão para colecionadores exigentes.</p>
-                <button class="btn-galaxy" onclick="irParaSobre()">CONHECER A EMPRESA</button>
-            </div>
-        `;
-    }
-
-    // --- NOVA PÁGINA: SOBRE A EMPRESA ---
-    function irParaSobre() {
-        if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
-        document.getElementById('content').innerHTML = `
-            <div class="about-container">
-                <h2 class="about-header">NOSSA MISSÃO GALÁCTICA</h2>
-                <div class="about-text">
-                    <p>A <strong>WB 3D Solutions</strong> não é apenas uma loja de impressões, é um hub de engenharia criativa focado em materializar o impossível. Fundada com o objetivo de elevar o padrão do mercado de manufatura aditiva, consolidamos nossa presença através da entrega de peças com acabamento impecável e precisão micrométrica.</p>
-                    <br>
-                    <p>Com anos de experiência e tecnologia de ponta, já transformamos centenas de projetos digitais em realidade física para uma legião de colecionadores e jogadores de RPG em todo o país. Nosso diferencial reside no rigoroso controle de qualidade: cada peça é tratada como um protótipo único, garantindo que você receba em sua base apenas o que há de melhor na tecnologia 3D atual.</p>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <h3>+500</h3>
-                        <p>Clientes Satisfeitos</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>100%</h3>
-                        <p>Fidelidade nos Detalhes</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>24/7</h3>
-                        <p>Suporte Especializado</p>
-                    </div>
-                </div>
-
-                <div style="margin-top:40px; text-align:center;">
-                    <p style="margin-bottom:20px; font-style:italic; opacity:0.7;">"A WB 3D Solutions trouxe meus personagens de RPG à vida com uma qualidade que eu nunca tinha visto antes." - Cliente Nível Lendário</p>
-                    <button class="btn-galaxy" onclick="navegar('colecionaveis')">EXPLORAR CATÁLOGO</button>
-                </div>
-            </div>
-        `;
-        window.scrollTo(0,0);
-    }
-
-    function navegar(categoria) {
-        if(document.getElementById('sidebar').classList.contains('active')) toggleMenu();
-        let html = `
-            <div style="padding: 40px 5% 0; text-align:center;">
-                <h2 style="font-family:Orbitron; letter-spacing:5px; color:var(--neon-blue);">SETOR: ${categoria.toUpperCase()}</h2>
-            </div>
-            <div class="product-grid">`;
-        
+        let html = `<div class="product-grid">`;
         for (let id in produtos) {
-            if (produtos[id].category === categoria) {
-                html += `
-                    <div class="product-card" onclick="renderizarProduto('${id}')">
-                        <div style="height:200px; margin-bottom:15px;">
-                            <model-viewer src="${produtos[id].model}" auto-rotate style="width:100%; height:100%; pointer-events:none;"></model-viewer>
-                        </div>
-                        <h3 style="font-family:Orbitron; font-size:1rem;">${produtos[id].name}</h3>
-                        <p style="color:var(--neon-blue); font-weight:bold; font-size:1.2rem;">R$ ${produtos[id].price.toFixed(2)}</p>
-                    </div>`;
-            }
+            html += `
+                <div class="product-card" onclick="abrirCheckout('${id}')">
+                    <model-viewer src="${produtos[id].model}" auto-rotate style="width:100%; height:200px;"></model-viewer>
+                    <h3 style="margin-top:15px;">${produtos[id].name}</h3>
+                    <p style="color:var(--neon-blue); font-weight:bold;">R$ ${produtos[id].price.toFixed(2)}</p>
+                </div>`;
         }
         html += `</div>`;
         document.getElementById('content').innerHTML = html;
-        window.scrollTo(0,0);
     }
 
-    function realizarBusca() {
-        const termo = document.getElementById('searchInput').value.toLowerCase().trim();
-        if (!termo) return;
-        for (let id in produtos) {
-            if (produtos[id].name.toLowerCase().includes(termo)) {
-                renderizarProduto(id);
-                return;
-            }
-        }
-        alert("Nenhum sinal encontrado no radar.");
-    }
-
-    function renderizarProduto(id) {
+    function abrirCheckout(id) {
         const p = produtos[id];
         document.getElementById('content').innerHTML = `
-            <div style="max-width:1200px; margin:40px auto; padding:20px; display:flex; flex-wrap:wrap; gap:40px;">
-                <div style="flex:1.2; min-width:300px; background:rgba(0,0,0,0.3); border-radius:20px;">
-                    <model-viewer src="${p.model}" camera-controls auto-rotate style="width:100%; height:500px;"></model-viewer>
+            <div class="checkout-container">
+                <h2 style="font-family: Orbitron; margin-bottom: 30px; text-align: center;">FINALIZAR AQUISIÇÃO</h2>
+                
+                <div class="checkout-grid">
+                    <div>
+                        <h3 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-truck"></i> ENDEREÇO DE ENTREGA</h3>
+                        <div class="form-group">
+                            <label>NOME COMPLETO</label>
+                            <input type="text" placeholder="Nome do Destinatário">
+                        </div>
+                        <div class="form-group">
+                            <label>CEP</label>
+                            <input type="text" placeholder="00000-000">
+                        </div>
+                        <div class="form-group">
+                            <label>RUA E NÚMERO</label>
+                            <input type="text" placeholder="Ex: Av. Galáctica, 101">
+                        </div>
+                        <div class="form-group">
+                            <label>E-MAIL PARA RASTREIO</label>
+                            <input type="email" placeholder="seuemail@exemplo.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--neon-blue); margin-bottom: 15px;"><i class="fas fa-credit-card"></i> PAGAMENTO SEGURO</h3>
+                        <div class="payment-card-visual">
+                            <div style="font-size: 0.7rem; opacity: 0.8;">Cartão de Crédito</div>
+                            <div style="margin: 15px 0; font-size: 1.2rem;">**** **** **** ****</div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
+                                <span>VALIDADE: --/--</span>
+                                <span>CVV: ***</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>NÚMERO DO CARTÃO</label>
+                            <input type="text" placeholder="0000 0000 0000 0000">
+                        </div>
+                        <div class="checkout-grid" style="gap: 10px;">
+                            <div class="form-group">
+                                <label>VALIDADE</label>
+                                <input type="text" placeholder="MM/AA">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" placeholder="123">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>PARCELAMENTO</label>
+                            <select style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(0,240,255,0.3); color:white; border-radius:8px;">
+                                <option>1x de R$ ${p.price.toFixed(2)} (Sem juros)</option>
+                                <option>2x de R$ ${(p.price/2).toFixed(2)}</option>
+                                <option>3x de R$ ${(p.price/3).toFixed(2)}</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div style="flex:1; min-width:300px;">
-                    <h1 style="font-family:Orbitron; font-size:2.5rem; margin-bottom:20px;">${p.name}</h1>
-                    <div style="font-size:2.5rem; color:var(--neon-blue); margin-bottom:30px;">R$ ${p.price.toFixed(2)}</div>
-                    <button class="btn-galaxy" style="width:100%; padding:20px;" onclick="window.open('https://wa.me/5531992994163')">SOLICITAR TELEPORTE (COMPRAR)</button>
-                    <p onclick="irParaHome()" style="margin-top:30px; cursor:pointer; opacity:0.5;"><i class="fas fa-arrow-left"></i> Voltar ao Menu</p>
+
+                <div style="border-top: 1px solid rgba(0,240,255,0.2); margin-top: 20px; padding-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-family: Orbitron; font-size: 1.4rem;">
+                        <span>TOTAL:</span>
+                        <span style="color: #00FF88;">R$ ${p.price.toFixed(2)}</span>
+                    </div>
+                    <button class="btn-pay" onclick="processarPagamento()">EFETUAR PAGAMENTO AGORA</button>
+                    <p style="text-align: center; font-size: 0.8rem; margin-top: 15px; opacity: 0.6;">
+                        <i class="fas fa-shield-alt"></i> Ambiente Criptografado e Seguro
+                    </p>
                 </div>
-            </div>`;
+            </div>
+        `;
+    }
+
+    function processarPagamento() {
+        // Aqui entraria a integração com a API (Mercado Pago, por exemplo)
+        // Por enquanto, simulamos o processamento
+        const btn = document.querySelector('.btn-pay');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSANDO NA REDE...';
+        btn.disabled = true;
+
+        setTimeout(() => {
+            document.getElementById('success-screen').style.display = 'flex';
+        }, 3000);
     }
 
     window.onload = irParaHome;
